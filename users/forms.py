@@ -4,11 +4,29 @@ from django.core.validators import validate_email
 
 class RegisterCustomerForm(forms.Form):
     email = forms.CharField(label="email",required=True, validators=[validate_email])
+    email.widget.attrs['placeholder'] = 'email'
+    email.widget.attrs['class'] = 'form-input'
+
     username = forms.CharField(label="username", required=True)
+    username.widget.attrs['placeholder'] = 'username'
+    username.widget.attrs['class'] = 'form-input'
+
     pass1 = forms.CharField(label="password",required=True, widget=forms.PasswordInput)
+    pass1.widget.attrs['placeholder'] = 'password'
+    pass1.widget.attrs['class'] = 'form-input'
+
     pass2 = forms.CharField(label="re-password", required=True, widget=forms.PasswordInput)
+    pass2.widget.attrs['placeholder'] = 'password'
+    pass2.widget.attrs['class'] = 'form-input'
+
     tel = forms.CharField(required=True, max_length=10)
+    tel.widget.attrs['placeholder'] = 'phone number'
+    tel.widget.attrs['class'] = 'form-input'
+
     style = forms.CharField(required=True, max_length=100)
+    style.widget.attrs['placeholder'] = 'style'
+    style.widget.attrs['class'] = 'form-input'
+
     MALE = "M"
     FEMALE = "F"
     OTHER = "X"
@@ -18,6 +36,9 @@ class RegisterCustomerForm(forms.Form):
         (OTHER, 'อื่น'),
     )
     gender = forms.ChoiceField(label="gender", widget=forms.RadioSelect(), required=True, choices=GENDERS)
+    gender.widget.attrs['class'] = "fontt"
+
+
     def clean_style(self):
         data = self.cleaned_data['style']
 

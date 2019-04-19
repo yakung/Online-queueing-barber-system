@@ -1,6 +1,11 @@
 {% extends 'users/base.html' %}
 {% block content %}
-    <!-- Sign up form -->
+     <!-- Sign up form -->
+    <style>
+    #id_gender_0,  #id_gender_1,  #id_gender_2{
+        margin-left: -17px;
+    }
+    </style>
     <section class="signup">
         <!-- <img src="images/signup-bg.jpg" alt=""> -->
         <div class="container">
@@ -30,16 +35,16 @@
                         {{ form.pass2.errors }}
                     </div>
                     <div class="form-group">
-                        {{ form.shopname }}
-                        {{ form.shopname.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.address }}
-                        {{ form.address.errors }}
+                        {{ form.style }}
+                        {{ form.style.errors }}
                     </div>
                     <div class="form-group">
                         {{ form.tel }}
                         {{ form.tel.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.gender }}
+                        {{ form.gender.errors }}
                     </div>
                     <div class="form-group">
                         <input type="checkbox" name="agree-term" id="agree-term" required/>

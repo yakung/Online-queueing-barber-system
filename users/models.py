@@ -5,14 +5,14 @@ from django.db import models
 
 
 class BarberShop(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     tel = models.CharField(null=False, max_length=10)
     address = models.TextField()
     shopname = models.CharField(null=False, max_length=250)
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     tel = models.CharField(null=False,max_length=10)
     style = models.CharField(null=False, max_length=100)
     MALE = "M"
