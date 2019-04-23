@@ -1,65 +1,8 @@
 {% extends 'users/base.html' %}
 {% block content %}
-     <!-- Sign up form -->
-    <style>
-    #id_gender_0,  #id_gender_1,  #id_gender_2{
-        margin-left: -17px;
-    }
-    </style>
-    <section class="signup">
-        <!-- <img src="images/signup-bg.jpg" alt=""> -->
-        <div class="container">
-            <div class="signup-content">
-                <form method="POST" id="signup-form" class="signup-form">
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger" style="padding: 0" role="alert">
-                            {{ form.non_field_errors }}
-                        </div>
-                    {% endif %}
-                    {% csrf_token %}
-                    <h2 class="form-title">Create account</h2>
-                    <div class="form-group">
-                        {{ form.username }}
-                        {{ form.username.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.email }}
-                        {{ form.email.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.pass1 }}
-                        {{ form.pass1.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.pass2 }}
-                        {{ form.pass2.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.style }}
-                        {{ form.style.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.tel }}
-                        {{ form.tel.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.gender }}
-                        {{ form.gender.errors }}
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="agree-term" id="agree-term" required/>
-                        <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all
-                            statements in <a href="#" class="term-service">Terms of service</a></label>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" style="cursor: pointer" name="submit" id="submit" class="form-submit"
-                               value="Sign up"/>
-                    </div>
-                </form>
-                <p class="loginhere">
-                    Have already an account ? <a href="#" class="loginhere-link">Login here</a>
-                </p>
-            </div>
-        </div>
-    </section>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="sign up">
+</form>
 {% endblock %}
