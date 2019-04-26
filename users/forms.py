@@ -106,6 +106,10 @@ class RegisterBarberForm(forms.Form):
     tel.widget.attrs['placeholder'] = 'mobile phone'
     tel.widget.attrs['class'] = 'form-input'
 
+    style = forms.CharField(label="hit style in your shop",required=True, max_length=100)
+    style.widget.attrs['placeholder'] = 'รองทรงสูง, สกีนเฮด'
+    style.widget.attrs['class'] = 'form-input'
+
     address = forms.CharField(label="address", widget=forms.Textarea, required=False)
     address.widget.attrs['placeholder'] = 'address'
     address.widget.attrs['class'] = 'form-input'
@@ -117,6 +121,14 @@ class RegisterBarberForm(forms.Form):
     shopname = forms.CharField(label="shop Name", required=False, max_length=250)
     shopname.widget.attrs['placeholder'] = 'shopname'
     shopname.widget.attrs['class'] = 'form-input'
+
+    def clean_style(self):
+        data = self.cleaned_data['style']
+
+        if (not data):
+            raise forms.ValidationError("โปรดใส่ทรงผมยอดนิยมของทางร้าน")
+
+        return data
 
     def clean_address(self):
         data = self.cleaned_data['address']

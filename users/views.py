@@ -30,6 +30,7 @@ def _login(req):
 
     next_url = req.GET.get('next')
     if next_url:
+        print(next_url)
         context['next_url'] = next_url
 
     return render(req, 'users/login.html', context=context)
@@ -70,7 +71,8 @@ def register_barber(req):
                     tel=form.cleaned_data.get('tel'),
                     address=form.cleaned_data.get('address'),
                     description=form.cleaned_data.get('description'),
-                    shopname=form.cleaned_data.get('shopname')
+                    shopname=form.cleaned_data.get('shopname'),
+                    style=form.cleaned_data.get('style')
                 )
                 return redirect('login')
             else:
@@ -97,7 +99,9 @@ def register_customer(req):
                     user=u,
                     tel=form.cleaned_data.get('tel'),
                     style=form.cleaned_data.get('style'),
-                    gender=form.cleaned_data.get('gender')
+                    gender=form.cleaned_data.get('gender'),
+                    name=form.cleaned_data.get('name')
+
                 )
                 return redirect('login')
             else:
