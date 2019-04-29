@@ -19,7 +19,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=100)
     tel = models.CharField(null=False, max_length=10)
-    style = models.CharField(null=False, max_length=100)
+    style = models.CharField(null=True, max_length=100)
     MALE = "M"
     FEMALE = "F"
     OTHER = "X"

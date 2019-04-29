@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-</head>
-<body>
-<h1>Index</h1>
-{% if user.is_authenticated %} <p>Welcome {{ user }}</p> {% endif %}
-{% if group == "BarberShop" %}
-    <a href="{% url 'updateb' %}">Update Barber Profile</a>
-{% elif group == "Customer" %}
-    <a href="{% url 'updatec' %}">Update Customer Profile</a>
-{% elif group == "admin" %}
-    <a href="#">Admin Profile</a>
-{% endif %}
-<br>
-{% if user.is_authenticated %}<a href="{% url 'logout' %}">logout</a> {% endif %}
-{% if BarberShop_rec %}
-    {% for shop in BarberShop_rec %}
-        <p>BarberShopFilter</p>
-        <p>Name : {{ shop.shopname }}</p>
-        <p>Address : {{ shop.address }}</p>
-        <p>Description : {{ shop.description }}</p>
-        <p>Style : {{ shop.style }}</p>
-        <a href="{% url 'detail' shop.id %}">detail</a>
-    {% endfor %}
-{% else %}
-    {% for shop in BarberShop %}
-        <p>BarberShop</p>
-        <p>Name : {{ shop.shopname }}</p>
-        <p>Address : {{ shop.address }}</p>
-        <p>Description : {{ shop.description }}</p>
-        <p>Style : {{ shop.style }}</p>
-        <a href="{% url 'detail' shop.id %}">detail</a>
-    {% endfor %}
-{% endif %}
-</body>
-</html>
+{% extends 'core/base.html' %}
+{% block title %}
+    index
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %} <p>Welcome {{ user }}</p> {% endif %}
+    {% if group == "BarberShop" %}
+        <a href="{% url 'updateb' %}">Update Barber Profile</a>
+    {% elif group == "Customer" %}
+        <a href="{% url 'updatec' %}">Update Customer Profile</a>
+    {% elif group == "admin" %}
+        <a href="#">Admin Profile</a>
+    {% endif %}
+    <br>
+    {% if user.is_authenticated %}<a href="{% url 'logout' %}">logout</a> {% endif %}
+    {% if BarberShop_rec %}
+        {% for shop in BarberShop_rec %}
+            <p>BarberShopFilter</p>
+            <p>Name : {{ shop.shopname }}</p>
+            <p>Address : {{ shop.address }}</p>
+            <p>Description : {{ shop.description }}</p>
+            <p>Style : {{ shop.style }}</p>
+            <a href="{% url 'detail' shop.id %}">detail</a>
+        {% endfor %}
+    {% else %}
+        {% for shop in BarberShop %}
+            <p>BarberShop</p>
+            <p>Name : {{ shop.shopname }}</p>
+            <p>Address : {{ shop.address }}</p>
+            <p>Description : {{ shop.description }}</p>
+            <p>Style : {{ shop.style }}</p>
+            <a href="{% url 'detail' shop.id %}">detail</a>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

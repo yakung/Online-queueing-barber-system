@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <h1>DashBoard</h1>
+    {% if user.is_authenticated %}<p>Welcome : {{ user }}</p>
+        <a href="{% url 'logout' %}">logout</a>
+    {% endif %}
+
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ blogform.as_p }}
+        <input type="submit" value="Post">
+    </form>
+{% endblock %}

@@ -12,16 +12,26 @@ def _login(req):
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
-
+        groupname = ""
         user = authenticate(req, username=username, password=password)
+        if(user):
+            groupname = user.groups.get()
+        print(groupname)
 
-        if user:
+        if user and str(groupname) == 'Customer':
             login(req, user)
             next_url = req.POST.get('next_url')  # hidden field input name
             if next_url:
                 return redirect(next_url)
             else:
                 return redirect('/')
+        elif user and str(groupname) == 'BarberShop':
+            login(req, user)
+            next_url = req.POST.get('next_url')  # hidden field input name
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect('/dashboard')
         else:
             error = 'Wrong username or password'
             context['username'] = username

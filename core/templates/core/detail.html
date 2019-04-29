@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Detail</title>
-</head>
-<body>
+{% extends 'core/base.html' %}
+{% block title %}
+    Detail
+{% endblock %}
+{% block content %}
 {% if user.is_authenticated %} <p>Welcome {{ user }}</p> {% endif %}
 <p>Name : {{ BarberShop.shopname }}</p>
 <p>Address : {{ BarberShop.address }}</p>
 <p>Description : {{ BarberShop.description }}</p>
-</body>
-</html>
+<a href="{% url 'reserve' BarberShop.id %}">reserve queue</a>
+{% endblock %}

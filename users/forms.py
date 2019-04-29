@@ -220,6 +220,7 @@ class BarberShopForm(forms.ModelForm):
         exclude = ['user']
 
 class CustomerForm(forms.ModelForm):
+    style = forms.CharField(max_length=100,required=False)
     class Meta:
         model = Customer
         exclude = ['user']

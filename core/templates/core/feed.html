@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% block title %}
+    feed
+{% endblock %}
+
+{% block content %}
+    <h1>Feed Page</h1>
+    {% for feed in feeds %}
+        {% if feed.picture %}
+            <img src="{{ feed.picture.url }}" width="200" height="200" alt="">
+        {% endif %}
+        <h1>Blog : {{ feed.header }}</h1>
+        <p>Blog : {{ feed.content }}</p>
+        <h4>Create by : {{ feed.BarberShop.shopname }}</h4>
+        <h4>Create at : {{ feed.create_date }}</h4>
+        <h4>Delete at : {{ feed.expired_date }}</h4>
+    {% endfor %}
+{% endblock %}

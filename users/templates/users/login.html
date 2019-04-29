@@ -1,5 +1,7 @@
 {% extends 'users/base.html' %}
-
+{% block title %}
+    Login
+{% endblock %}
 {% block content %}
 
     <form action="{% url 'login' %}" method="post" id="signup-form" class="signup-form">
