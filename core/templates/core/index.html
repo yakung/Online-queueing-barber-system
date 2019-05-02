@@ -3,19 +3,11 @@
     index
 {% endblock %}
 {% block content %}
-    {% if user.is_authenticated %} <p>Welcome {{ user }}</p> {% endif %}
-    {% if group == "BarberShop" %}
-        <a href="{% url 'updateb' %}">Update Barber Profile</a>
-    {% elif group == "Customer" %}
-        <a href="{% url 'updatec' %}">Update Customer Profile</a>
-    {% elif group == "admin" %}
-        <a href="#">Admin Profile</a>
-    {% endif %}
     <br>
-    {% if user.is_authenticated %}<a href="{% url 'logout' %}">logout</a> {% endif %}
     {% if BarberShop_rec %}
         {% for shop in BarberShop_rec %}
             <p>BarberShopFilter</p>
+            <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
             <p>Name : {{ shop.shopname }}</p>
             <p>Address : {{ shop.address }}</p>
             <p>Description : {{ shop.description }}</p>
@@ -25,6 +17,7 @@
     {% else %}
         {% for shop in BarberShop %}
             <p>BarberShop</p>
+            <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
             <p>Name : {{ shop.shopname }}</p>
             <p>Address : {{ shop.address }}</p>
             <p>Description : {{ shop.description }}</p>

@@ -42,6 +42,7 @@ def is_barbershop(user):
 @login_required()
 @user_passes_test(is_barbershop)
 def dashboard(req):
+    context = {}
     user_id = req.user.id
     shop = BarberShop.objects.get(user_id=user_id)
     print(shop)
@@ -56,14 +57,13 @@ def dashboard(req):
                 create_date=datetime.now(),
                 expired_date=datetime.now() + timedelta(seconds=120)
             )
+            context['success']='โปรโมทสำเร็จ'
     else:
         form = BlogForm()
-    context = {
-        'blogform': form
-    }
+    context['blogform']=form
     return render(req, 'core/dashboard.html', context)
 
-def feed(req):
+def blog(req):
     feeds = Blog.objects.all().order_by('-create_date')
     print(datetime.now())
     print(Blog.objects.filter(expired_date__lt=datetime.now()).exists())
@@ -75,3 +75,4 @@ def feed(req):
         'feeds': feeds,
     }
     return render(req, 'core/feed.html', context)
+

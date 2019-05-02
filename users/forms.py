@@ -5,33 +5,23 @@ from users.models import BarberShop, Customer
 
 
 class RegisterCustomerForm(forms.Form):
-    email = forms.CharField(label="email", required=True, validators=[validate_email])
-    email.widget.attrs['placeholder'] = 'email'
-    email.widget.attrs['class'] = 'form-input'
+    email = forms.CharField(label="อีเมล์ :", required=False, validators=[validate_email])
+    email.widget.attrs['placeholder'] = 'xxx@xxx.com'
 
-    username = forms.CharField(label="username", required=True)
+    username = forms.CharField(label='ชื่อผู้ใช้ :', required=False)
     username.widget.attrs['placeholder'] = 'username'
-    username.widget.attrs['class'] = 'form-input'
 
-    pass1 = forms.CharField(label="password", required=True, widget=forms.PasswordInput)
-    pass1.widget.attrs['placeholder'] = 'password'
-    pass1.widget.attrs['class'] = 'form-input'
+    pass1 = forms.CharField(label="รหัสผ่าน :", required=False, widget=forms.PasswordInput)
 
-    pass2 = forms.CharField(label="re-password", required=True, widget=forms.PasswordInput)
-    pass2.widget.attrs['placeholder'] = 'password'
-    pass2.widget.attrs['class'] = 'form-input'
+    pass2 = forms.CharField(label='รหัสผ่านใหม่ :', required=False, widget=forms.PasswordInput)
 
-    name = forms.CharField(required=True)
-    name.widget.attrs['placeholder'] = 'name'
-    name.widget.attrs['class'] = 'form-input'
+    name = forms.CharField(label='ชื่อลูกค้า :', required=False)
 
-    tel = forms.CharField(required=True, max_length=10)
-    tel.widget.attrs['placeholder'] = 'phone number'
+    tel = forms.CharField(label='เบอร์โทรศัพท์',required=False, max_length=10)
     tel.widget.attrs['class'] = 'form-input'
 
-    style = forms.CharField(required=True, max_length=100)
-    style.widget.attrs['placeholder'] = 'style'
-    style.widget.attrs['class'] = 'form-input'
+    style = forms.CharField(label='ทรงผมที่ชื่นชอบ', required=False, max_length=100)
+    style.widget.attrs['placeholder'] = 'เช่น รองทรงสูง, สกีนเฮด'
 
     MALE = "M"
     FEMALE = "F"
@@ -41,8 +31,18 @@ class RegisterCustomerForm(forms.Form):
         (FEMALE, 'หญิง'),
         (OTHER, 'อื่น'),
     )
-    gender = forms.ChoiceField(label="gender", widget=forms.RadioSelect(), required=True, choices=GENDERS)
+    gender = forms.ChoiceField(label="เพศ", widget=forms.RadioSelect(), required=True, choices=GENDERS)
     gender.widget.attrs['class'] = "fontt"
+
+    def clean_name(self):
+        data = self.cleaned_data['username']
+        if not data:
+            raise forms.ValidationError("โปรดใส่ชื่อลูกค้า")
+
+    def clean_username(self):
+        data = self.cleaned_data['username']
+        if not data:
+            raise forms.ValidationError("โปรดใส่ชื่อผู้ใช้")
 
     def clean_style(self):
         data = self.cleaned_data['style']
@@ -64,6 +64,9 @@ class RegisterCustomerForm(forms.Form):
 
     def clean_pass1(self):
         data = self.cleaned_data['pass1']
+
+        if not data:
+            raise forms.ValidationError("โปรดใส่รหัสผ่าน")
         if (len(data) < 8):
             raise forms.ValidationError("รหัสผ่านต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
 
@@ -72,6 +75,8 @@ class RegisterCustomerForm(forms.Form):
     def clean_pass2(self):
         data = self.cleaned_data['pass2']
 
+        if not data:
+            raise forms.ValidationError("โปรดใส่รหัสผ่านใหม่")
         if (len(data) < 8):
             raise forms.ValidationError("รหัสผ่านใหม่ต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
 
@@ -86,41 +91,34 @@ class RegisterCustomerForm(forms.Form):
 
 
 class RegisterBarberForm(forms.Form):
-    email = forms.CharField(label="email", required=False, validators=[validate_email])
-    email.widget.attrs['placeholder'] = 'email'
-    email.widget.attrs['class'] = 'form-input'
+    email = forms.CharField(label='อีเมล์ :', required=False, validators=[validate_email])
+    email.widget.attrs['placeholder'] = 'xxx@xxx.com'
 
-    username = forms.CharField(label="username", required=True, )
+    username = forms.CharField(label='ชื่อผู้ใช้ :',required=False, )
     username.widget.attrs['placeholder'] = 'username'
-    username.widget.attrs['class'] = 'form-input'
 
-    pass1 = forms.CharField(label="password", required=True, widget=forms.PasswordInput)
-    pass1.widget.attrs['placeholder'] = 'password'
-    pass1.widget.attrs['class'] = 'form-input'
+    pass1 = forms.CharField(label='รหัสผ่าน :',required=False, widget=forms.PasswordInput)
 
-    pass2 = forms.CharField(label="re-password", required=True, widget=forms.PasswordInput)
-    pass2.widget.attrs['placeholder'] = 're-password'
-    pass2.widget.attrs['class'] = 'form-input'
+    pass2 = forms.CharField(label='รหัสผ่านใหม่ :', required=False, widget=forms.PasswordInput)
 
-    tel = forms.CharField(label="tel", max_length=10)
-    tel.widget.attrs['placeholder'] = 'mobile phone'
-    tel.widget.attrs['class'] = 'form-input'
+    shopname = forms.CharField(label='ชื่อร้าน :',required=False, max_length=250)
+    
+    tel = forms.CharField(label='เบอร์โทรร้าน :',required=False, max_length=10)
 
-    style = forms.CharField(label="hit style in your shop",required=True, max_length=100)
-    style.widget.attrs['placeholder'] = 'รองทรงสูง, สกีนเฮด'
-    style.widget.attrs['class'] = 'form-input'
+    style = forms.CharField(label='ทรงผมยอดนิยม :', required=False, max_length=100)
+    style.widget.attrs['placeholder'] = 'เช่น รองทรงสูง, สกีนเฮด'
 
-    address = forms.CharField(label="address", widget=forms.Textarea, required=False)
-    address.widget.attrs['placeholder'] = 'address'
-    address.widget.attrs['class'] = 'form-input'
+    address = forms.CharField(label='สถานที่ตั้งของร้าน :',widget=forms.Textarea, required=False)
 
-    description = forms.CharField(label="description", widget=forms.Textarea, required=False)
-    description.widget.attrs['placeholder'] = 'description'
-    description.widget.attrs['class'] = 'form-input'
+    description = forms.CharField(label='คำอธิบายร้าน :', widget=forms.Textarea, required=False)
 
-    shopname = forms.CharField(label="shop Name", required=False, max_length=250)
-    shopname.widget.attrs['placeholder'] = 'shopname'
-    shopname.widget.attrs['class'] = 'form-input'
+    pic = forms.ImageField(label='รูปร้าน :', required=False)
+
+    def clean_username(self):
+        data = self.cleaned_data['username']
+        if not data:
+            raise forms.ValidationError("โปรดใส่ชื่อผู้ใช้")
+        return data
 
     def clean_style(self):
         data = self.cleaned_data['style']
@@ -162,6 +160,8 @@ class RegisterBarberForm(forms.Form):
 
     def clean_pass1(self):
         data = self.cleaned_data['pass1']
+        if not data:
+            raise forms.ValidationError("โปรดใส่รหัสผ่าน")
         if len(data) < 8:
             raise forms.ValidationError("รหัสผ่านต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
 
@@ -169,6 +169,9 @@ class RegisterBarberForm(forms.Form):
 
     def clean_pass2(self):
         data = self.cleaned_data['pass2']
+
+        if not data:
+            raise forms.ValidationError("โปรดใส่รหัสผ่านใหม่")
 
         if len(data) < 8:
             raise forms.ValidationError("รหัสผ่านใหม่ต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
@@ -217,10 +220,28 @@ class ChangePasswordForm(forms.Form):
 class BarberShopForm(forms.ModelForm):
     class Meta:
         model = BarberShop
-        exclude = ['user']
+        fields = ['shopname', 'tel', 'address', 'style', 'description', 'pic']
+        labels = {
+            "shopname": "ชื่อร้าน",
+            'tel':'เบอร์โทรร้าน',
+            'address':'ที่อยู่ของร้าน',
+            'style':'ทรงผมยอดนิยม',
+            'description':'คำอธิบายร้าน',
+            'pic':'รูปร้าน'
+        }
 
 class CustomerForm(forms.ModelForm):
     style = forms.CharField(max_length=100,required=False)
     class Meta:
         model = Customer
-        exclude = ['user']
+        fields = ['name', 'tel', 'style', 'gender']
+        labels = {
+            "name": "ชื่อลูกค้า",
+            'tel': 'เบอร์โทร',
+            'style': 'ทรงผมที่ชื่นชอบ',
+            'gender': 'เพศ'
+        }
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='username', required=False, )
+    password = forms.CharField(label="password", required=False, widget=forms.PasswordInput)

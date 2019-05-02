@@ -11,6 +11,7 @@ class BarberShop(models.Model):
     shopname = models.CharField(null=False, max_length=250)
     style = models.CharField(null=False, max_length=100)
     description = models.TextField()
+    pic = models.ImageField(upload_to='shop_pic', default='shop_pic/default.jpg')
 
     def __str__(self):
         return self.shopname

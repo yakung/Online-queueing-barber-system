@@ -1,17 +1,19 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}
     Dashboard
 {% endblock %}
 {% block content %}
     <h1>DashBoard</h1>
-    {% if user.is_authenticated %}<p>Welcome : {{ user }}</p>
-        <a href="{% url 'logout' %}">logout</a>
+    <hr>
+    {% if success %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
     {% endif %}
-
-
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="text-left">
         {% csrf_token %}
-        {{ blogform.as_p }}
-        <input type="submit" value="Post">
+        {{ blogform|crispy }}
+        <input type="submit" value="post" class="btn btn-primary w-100">
     </form>
 {% endblock %}

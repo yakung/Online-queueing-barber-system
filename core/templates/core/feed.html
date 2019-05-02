@@ -11,7 +11,7 @@
         {% endif %}
         <h1>Blog : {{ feed.header }}</h1>
         <p>Blog : {{ feed.content }}</p>
-        <h4>Create by : {{ feed.BarberShop.shopname }}</h4>
+        <h4>Create by : <a href="{% url 'detail' feed.BarberShop.id%}" style="color: black">{{ feed.BarberShop.shopname }}</a></h4>
         <h4>Create at : {{ feed.create_date }}</h4>
         <h4>Delete at : {{ feed.expired_date }}</h4>
     {% endfor %}

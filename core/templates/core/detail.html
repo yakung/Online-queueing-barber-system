@@ -3,9 +3,9 @@
     Detail
 {% endblock %}
 {% block content %}
-{% if user.is_authenticated %} <p>Welcome {{ user }}</p> {% endif %}
-<p>Name : {{ BarberShop.shopname }}</p>
-<p>Address : {{ BarberShop.address }}</p>
-<p>Description : {{ BarberShop.description }}</p>
-<a href="{% url 'reserve' BarberShop.id %}">reserve queue</a>
+    <img src="{{ BarberShop.pic.url }}" alt="" width="200" height="200">
+    <p>Name : {{ BarberShop.shopname }}</p>
+    <p>Address : {{ BarberShop.address }}</p>
+    <p>Description : {{ BarberShop.description }}</p>
+    <a href="{% url 'reserve' BarberShop.id %}">reserve queue</a>
 {% endblock %}

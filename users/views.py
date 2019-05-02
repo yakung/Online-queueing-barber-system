@@ -3,46 +3,44 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import BarberShop, Customer
-from .forms import RegisterBarberForm, RegisterCustomerForm, ChangePasswordForm, BarberShopForm, CustomerForm
+from .forms import RegisterBarberForm, RegisterCustomerForm, ChangePasswordForm, BarberShopForm, CustomerForm, LoginForm
 from django.contrib.auth.models import Group
 
 
 def _login(req):
     context = {}
     if req.method == 'POST':
-        username = req.POST.get('username')
-        password = req.POST.get('password')
-        groupname = ""
-        user = authenticate(req, username=username, password=password)
-        if(user):
-            groupname = user.groups.get()
-        print(groupname)
+        form = LoginForm(req.POST)
+        context['form'] = form
+        if form.is_valid():
+            username = req.POST.get('username')
+            password = req.POST.get('password')
+            groupname = ""
+            user = authenticate(req, username=username, password=password)
+            if(user):
+                groupname = user.groups.get()
 
-        if user and str(groupname) == 'Customer':
-            login(req, user)
-            next_url = req.POST.get('next_url')  # hidden field input name
-            if next_url:
-                return redirect(next_url)
+            if user and str(groupname) == 'Customer':
+                login(req, user)
+                next_url = req.POST.get('next_url')  # hidden field input name
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('/')
+            elif user and str(groupname) == 'BarberShop':
+                login(req, user)
+                next_url = req.POST.get('next_url')  # hidden field input name
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('/dashboard')
             else:
-                return redirect('/')
-        elif user and str(groupname) == 'BarberShop':
-            login(req, user)
-            next_url = req.POST.get('next_url')  # hidden field input name
-            if next_url:
-                return redirect(next_url)
-            else:
-                return redirect('/dashboard')
-        else:
-            error = 'Wrong username or password'
-            context['username'] = username
-            context['password'] = password
-            context['error'] = 'Wrong username or password'
-
+                context['error'] = 'Wrong username or password'
     next_url = req.GET.get('next')
     if next_url:
         print(next_url)
         context['next_url'] = next_url
-
+    context['form'] = LoginForm()
     return render(req, 'users/login.html', context=context)
 
 def _logout(req):
@@ -52,23 +50,24 @@ def _logout(req):
 @login_required()
 @permission_required('users.change_barbershop')
 def update_barber(req):
+    context = {}
     barbershop = BarberShop.objects.get(user_id=req.user.id)
     if req.method == "POST":
         form = BarberShopForm(req.POST, instance=barbershop)
         if form.is_valid():
             form.save()
+            context['success'] = 'update successfully'
+
     else:
         form = BarberShopForm(instance=barbershop)
 
-    context = {
-        'form': form
-    }
+    context['form'] = form
     return render(req, 'users/update_barber.html', context)
 
 
 def register_barber(req):
     if req.method == "POST":
-        form = RegisterBarberForm(req.POST)
+        form = RegisterBarberForm(req.POST , req.FILES)
         if form.is_valid():
             if (not User.objects.filter(username=form.cleaned_data.get('username')).exists()):
                 u = User.objects.create_user(username=form.cleaned_data.get('username'),
@@ -82,7 +81,8 @@ def register_barber(req):
                     address=form.cleaned_data.get('address'),
                     description=form.cleaned_data.get('description'),
                     shopname=form.cleaned_data.get('shopname'),
-                    style=form.cleaned_data.get('style')
+                    style=form.cleaned_data.get('style'),
+                    pic=form.cleaned_data.get('pic')
                 )
                 return redirect('login')
             else:
@@ -127,28 +127,28 @@ def register_customer(req):
 @login_required()
 @permission_required('users.change_customer')
 def update_customer(req):
+    context = {}
     customer = Customer.objects.get(user_id=req.user.id)
     if req.method == "POST":
         form = CustomerForm(req.POST, instance=customer)
         if form.is_valid():
             form.save()
+            context['success'] = 'update successfully'
     else:
         form = CustomerForm(instance=customer)
 
-    context = {
-        'form': form
-    }
+    context['form']=form
     return render(req, 'users/update_customer.html', context)
 
 
 @login_required()
 def changepass(req):
     if (req.method == "POST"):
+
         form = ChangePasswordForm(req.POST)
         if form.is_valid():
             user = req.user
             u = authenticate(req, username=user.username, password=form.cleaned_data.get('old_password'))
-
             if(u):
                 u.set_password(form.cleaned_data.get('new_password1'))
                 u.save()
@@ -163,3 +163,6 @@ def changepass(req):
     }
     return render(req, 'users/change_password.html', context)
 
+
+def choose(req):
+    return render(req, 'users/choose.html')

@@ -1,0 +1,32 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block title %}
+    choose role
+{% endblock %}
+{% block content %}
+    <h1 class="text-center my-4 ">Choose Role</h1>
+    <hr>
+    <br>
+    <div class="row mx-auto">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="card" style="width:480px">
+                <img class="card-img-top" src="{% static 'images/iconbarber.png' %}" alt="Card image">
+                <div class="card-body">
+                    <a href="{% url 'regb' %}" class="badge badge-warning w-100 p-2" style="font-size: 18px">As Barber</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="card" style="width:480px">
+                <img class="card-img-top" src="{% static 'images/iconuser.png' %}" alt="Card image">
+                <div class="card-body">
+                    <a href="{% url 'regc' %}" class="badge badge-warning w-100 p-2" style="font-size: 18px">As Customer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

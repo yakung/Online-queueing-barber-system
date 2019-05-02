@@ -16,5 +16,4 @@ class BlogForm(forms.Form):
         data = self.cleaned_data['content']
         if not data:
             raise forms.ValidationError('โปรดเขียนรายละเอียด')
-
         return data

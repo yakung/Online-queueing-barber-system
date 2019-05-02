@@ -5,11 +5,11 @@ from django.shortcuts import render
 from .forms import QueueForm
 
 #check user group
-def is_customer(user):
-    return user.groups.filter(name='Customer').exists()
+def is_in_multiple_groups(user):
+    return user.groups.filter(name__in=['Customer', 'BarberShop']).exists()
 
 @login_required()
-@user_passes_test(is_customer)
+@user_passes_test(is_in_multiple_groups)
 def reserve_queue(req, shop_id):
     if req.method == "POST":
         form_queue = QueueForm(req.POST)
