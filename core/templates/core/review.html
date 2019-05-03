@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Review
+{% endblock %}
+{% block content %}
+    <h1 class="p-4"><span class="badge badge-pill badge-light">Review</span><br><span class="badge badge-pill badge-dark mt-3">@ {{ shop.shopname }}</span></h1>
+    <hr>
+    <form action="" method="post" class="text-left">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-primary">
+    </form>
+{% endblock %}

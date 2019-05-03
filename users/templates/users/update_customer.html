@@ -4,7 +4,7 @@
     Update profile
 {% endblock %}
 {% block content %}
-    <h2 class="text-center my-4">Update profile</h2>
+    <h1 class="p-4 text-center"><span class="badge badge-pill badge-light">Update profile</span></h1>
     <hr>
     {% if success %}
         <div class="alert alert-success">
@@ -14,7 +14,7 @@
     <br>
     <div class="card border-dark">
         <div class="card-body p-5">
-            <form action="" method="POST">
+            <form action="" method="POST" class="f">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <a href="{% url 'changepass' %}" class="btn btn-info">change password</a>

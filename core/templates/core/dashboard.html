@@ -4,16 +4,156 @@
     Dashboard
 {% endblock %}
 {% block content %}
-    <h1>DashBoard</h1>
+    <h1 class="p-4"><span class="badge badge-pill badge-light">Dashboard</span></h1>
     <hr>
     {% if success %}
         <div class="alert alert-success">
             {{ success }}
         </div>
+    {% elif error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
     {% endif %}
-    <form method="post" enctype="multipart/form-data" class="text-left">
-        {% csrf_token %}
-        {{ blogform|crispy }}
-        <input type="submit" value="post" class="btn btn-primary w-100">
-    </form>
+    <h3 class="my-4 text-left"><span class="badge badge-pill badge-info p-3">Queue</span></h3>
+
+
+    <div class="table-responsive-md d-none d-xs-none d-lg-none d-sm-none d-md-block">
+        <table class="table">
+            <thead class="black white-text">
+            <tr>
+                <td style="font-size: 1.25em">เริ่ม</td>
+                <td style="font-size: 1.25em">ถึง</td>
+                <td style="font-size: 1.25em">ชื่อลูกค้า</td>
+                <td style="font-size: 1.25em">สถานะ</td>
+                <td style="font-size: 1.25em">เปลี่ยนสถานะ</td>
+            </tr>
+            </thead>
+
+            {% for q in queues %}
+                <tr>
+                    <td style="font-size: 1.25em;">{{ q.start_queue }}</td>
+                    <td style="font-size: 1.25em">{{ q.end_queue }}</td>
+                    <td style="font-size: 1.25em">{{ q.customer.name }}</td>
+                    <td>
+                        {% if q.status == '01' %}
+                            <span class="badge badge-light" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '02' %}
+                            <span class="badge badge-warning"
+                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '03' %}
+                            <span class="badge badge-success"
+                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '04' %}
+                            <span class="badge badge-danger" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" value="{{ q.id }}" name="qid">
+                                    <select class="browser-default custom-select" name="status">
+                                        <option value="" disabled selected>เลือกสถานะ</option>
+                                        <option value="01">waiting</option>
+                                        <option value="02">processing</option>
+                                        <option value="03">finish</option>
+                                        <option value="04">delete</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="update" class="btn btn-primary"
+                                           style="border-radius: 10em">
+                                </div>
+
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table-responsive-lg d-none d-md-none d-sm-none d-lg-block">
+        <table class="table">
+            <thead class="black white-text">
+            <tr>
+                <td>เริ่ม</td>
+                <td>ถึง</td>
+                <td>ทรงที่ตัด</td>
+                <td>รูปอ้างอิง</td>
+                <td>ชื่อลูกค้า</td>
+                <td>สถานะ</td>
+                <td>เปลี่ยนสถานะ</td>
+            </tr>
+            </thead>
+
+            {% for q in queues %}
+                <tr>
+                    <td style="font-size: 1.25em">{{ q.start_queue }}</td>
+                    <td style="font-size: 1.25em">{{ q.end_queue }}</td>
+                    <td style="font-size: 1.25em">{{ q.hairstyle }}</td>
+                    <td><img src="{{ q.ref_pic.url }}" alt="" width="80" height="80"></td>
+                    <td style="font-size: 1.25em">{{ q.customer.name }}</td>
+                    <td>
+                        {% if q.status == '01' %}
+                            <span class="badge badge-light" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '02' %}
+                            <span class="badge badge-warning"
+                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '03' %}
+                            <span class="badge badge-success"
+                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% elif q.status == '04' %}
+                            <span class="badge badge-danger" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" value="{{ q.id }}" name="qid">
+                                    <select class="browser-default custom-select" name="status">
+                                        <option value="" disabled selected>เลือกสถานะ</option>
+                                        <option value="02">processing</option>
+                                        <option value="03">finish</option>
+                                        <option value="04">delete</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="update" class="btn btn-primary"
+                                           style="border-radius: 10em">
+                                </div>
+
+                            </form>
+                        </div>
+                    </td>
+
+
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+    <div class='card p-4'>
+        <div class="card-title">
+            <h3 class="text-left"><span class="badge badge-pill badge-secondary p-2">Promote shop</span></h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="text-left f">
+                {% csrf_token %}
+                {{ blogform|crispy }}
+                <input type="submit" value="post" class="btn btn-primary w-100">
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+
 {% endblock %}
+
+

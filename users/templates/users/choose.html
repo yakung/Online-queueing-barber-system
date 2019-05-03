@@ -4,23 +4,32 @@
     choose role
 {% endblock %}
 {% block content %}
-    <h1 class="text-center my-4 ">Choose Role</h1>
+    <style>
+        .a1:hover{
+            color:black;
+        }
+    </style>
+    <h1 class="p-4 text-center"><span class="badge badge-pill badge-light">Choose role</span></h1>
     <hr>
     <br>
     <div class="row mx-auto">
         <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="card" style="width:480px">
-                <img class="card-img-top" src="{% static 'images/iconbarber.png' %}" alt="Card image">
+            <div class="card my-2" style="width:480px">
+                <img class="card-img-top" src="{% static 'images/iconbarber.png' %}" width="450" height="450" alt="Card image">
+
+
                 <div class="card-body">
-                    <a href="{% url 'regb' %}" class="badge badge-warning w-100 p-2" style="font-size: 18px">As Barber</a>
+                    <a href="{% url 'regb' %}" class="badge badge-warning w-100 p-2 a1" style="font-size: 18px"><span class="a1">As
+                        Barber</span></a>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="card" style="width:480px">
-                <img class="card-img-top" src="{% static 'images/iconuser.png' %}" alt="Card image">
+            <div class="card my-2" style="width:480px">
+                <img class="card-img-top" src="{% static 'images/iconuser.png' %}" width="450" height="450" alt="Card image">
                 <div class="card-body">
-                    <a href="{% url 'regc' %}" class="badge badge-warning w-100 p-2" style="font-size: 18px">As Customer</a>
+                    <a href="{% url 'regc' %}" class="badge badge-warning w-100 p-2" style="font-size: 18px"><span class="a1">As
+                        Customer</span></a>
                 </div>
             </div>
         </div>

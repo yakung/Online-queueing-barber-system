@@ -1,0 +1,79 @@
+{% extends 'booking/base.html' %}
+{% block title %}
+    History
+{% endblock %}
+{% block content %}
+    <h1 class="p-4 text-center"><span class="badge badge-pill badge-light p-3">History</span></h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <hr>
+    <h3 class="my-4"><span class="badge badge-pill badge-info p-3">Queue</span></h3>
+    <table class="table f">
+        <thead class="black white-text">
+        <tr>
+            <td style="font-size: 1.25em">เริ่ม</td>
+            <td style="font-size: 1.25em">ถึง</td>
+            <td style="font-size: 1.25em">ชื่อร้าน</td>
+            <td style="font-size: 1.25em">สถานะ</td>
+        </tr>
+        </thead>
+
+        {% for q in queues %}
+            <tr>
+                <td style="font-size: 1.25em">{{ q.start_queue }}</td>
+                <td style="font-size: 1.25em">{{ q.end_queue }}</td>
+                <td style="font-size: 1.25em">{{ q.barbershop.shopname }}</td>
+                <td>
+                    {% if q.status == '01' %}
+                        <span class="badge badge-light" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                    {% elif q.status == '02' %}
+                        <span class="badge badge-warning"
+                              style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {#    </div>#}
+    <hr>
+    <h3 class="my-4"><span class="badge badge-pill badge-secondary p-3">Queue history</span></h3>
+
+    {#    <div class="table-responsive-md d-none d-xs-none d-lg-none d-sm-none d-md-block">#}
+    <table class="table f">
+        <thead class="black white-text">
+        <tr>
+            <td  style="font-size: 1.25em">เริ่ม</td>
+            <td  style="font-size: 1.25em">ถึง</td>
+            <td  style="font-size: 1.25em">ชื่อร้าน</td>
+            <td  style="font-size: 1.25em">สถานะ</td>
+        </tr>
+        </thead>
+        {% for q in queues_history %}
+            <tr>
+                <td style="font-size: 1.25em;opacity: 0.4;">{{ q.start_queue }}</td>
+                <td style="font-size: 1.25em;opacity: 0.4;">{{ q.end_queue }}</td>
+                <td style="font-size: 1.25em;opacity: 0.4;">{{ q.barbershop.shopname }}</td>
+                <td>
+
+                    {% if q.status == '03' %}
+                        <a href="{% url 'review' q.barbershop.id q.id %}" class="btn btn-light" ,
+                           style="font-size: 0.7em;border-radius: 10em">Review</a>
+                    {% elif q.status == '04' %}
+                        <span class="badge badge-danger"
+                              style="font-size: 1.25em;opacity: 0.4;">{{ q.get_status_display }}</span>
+                    {% elif q.status == '05' %}
+                        <span class="badge badge-success"
+                              style="font-size: 1.25em;opacity: 0.4;">{{ q.get_status_display }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {#    </div>#}
+{% endblock %}

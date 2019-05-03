@@ -128,9 +128,6 @@ MEDIA_URL = '/pictures/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'core/static'),
-    os.path.join(BASE_DIR, 'users/static'),
-    os.path.join(BASE_DIR, 'booking/static'),
 
 ]
 

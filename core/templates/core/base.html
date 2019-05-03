@@ -3,10 +3,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        .rating-box {
+            color: whitesmoke;
+            border: solid;
+            background-color: indigo;
+            border-radius: 15px 15px 15px 5px
+        }
+
+        shop:hover {
+            background-color: turquoise;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -24,11 +42,12 @@
             {% if user.is_authenticated %}
                 {% if user.groups.all.0.name ==  'BarberShop' %}
                     <li><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
-                     <li><a href="{% url 'updateb' %}" class="navbar-text"><span
-                            class="badge badge-secondary">Welcome {{ user }}</span></a></li>
+                    <li><a href="{% url 'updateb' %}" class="navbar-text"><span
+                            class="badge badge-pill badge-light">Welcome {{ user }}</span></a></li>
                 {% else %}
+                    <li><a class="nav-link" href="{% url 'history' %}">History</a></li>
                     <li><a href="{% url 'updatec' %}" class="navbar-text"><span
-                            class="badge badge-secondary">Welcome {{ user }}</span></a></li>
+                            class="badge badge-pill badge-light">Welcome {{ user }}</span></a></li>
                 {% endif %}
                 <li><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
 
@@ -38,14 +57,21 @@
             {% endif %}
         </ul>
     </div>
+
 </nav>
-<div class="container text-center">
+<div class="container text-center f">
     {% block content %}
     {% endblock %}
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
 </body>
 </html>

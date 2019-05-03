@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Prompt');
+
 body {
-  background-image: url("../images/all.jpg");
-  background-size: cover;
+    background-image: url("../images/all.jpg");
+    background-size: cover;
+}
+
+.f {
+    font-family: 'Prompt', sans-serif;
 }

@@ -1,9 +1,10 @@
 from django.contrib.auth import logout, authenticate, login
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import BarberShop, Customer
-from .forms import RegisterBarberForm, RegisterCustomerForm, ChangePasswordForm, BarberShopForm, CustomerForm, LoginForm
+from .forms import RegisterBarberForm, RegisterCustomerForm, ChangePasswordForm, BarberShopForm, CustomerForm, \
+    LoginForm
 from django.contrib.auth.models import Group
 
 
@@ -47,8 +48,11 @@ def _logout(req):
     logout(req)
     return redirect('login')
 
+def is_barbershop(user):
+    return user.groups.filter(name='BarberShop').exists()
+
 @login_required()
-@permission_required('users.change_barbershop')
+@user_passes_test(is_barbershop)
 def update_barber(req):
     context = {}
     barbershop = BarberShop.objects.get(user_id=req.user.id)
@@ -124,8 +128,12 @@ def register_customer(req):
     }
     return render(req, 'users/register_customer.html', context)
 
+
+def is_customer(user):
+    return user.groups.filter(name='Customer').exists()
+
 @login_required()
-@permission_required('users.change_customer')
+@user_passes_test(is_customer)
 def update_customer(req):
     context = {}
     customer = Customer.objects.get(user_id=req.user.id)

@@ -4,15 +4,55 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Feed Page</h1>
-    {% for feed in feeds %}
-        {% if feed.picture %}
-            <img src="{{ feed.picture.url }}" width="200" height="200" alt="">
-        {% endif %}
-        <h1>Blog : {{ feed.header }}</h1>
-        <p>Blog : {{ feed.content }}</p>
-        <h4>Create by : <a href="{% url 'detail' feed.BarberShop.id%}" style="color: black">{{ feed.BarberShop.shopname }}</a></h4>
-        <h4>Create at : {{ feed.create_date }}</h4>
-        <h4>Delete at : {{ feed.expired_date }}</h4>
-    {% endfor %}
+    {#        {% for feed in feeds %}#}
+    {#            {% if feed.picture %}#}
+    {#                <img src="{{ feed.picture.url }}" width="200" height="200" alt="">#}
+    {#            {% endif %}#}
+    {#            <h1>Blog : {{ feed.header }}</h1>#}
+    {#            <p>Blog : {{ feed.content }}</p>#}
+    {#            <h4>Create by : <a href="{% url 'detail' feed.BarberShop.id %}"#}
+    {#                               style="color: black">{{ feed.BarberShop.shopname }}</a></h4>#}
+    {#            <h4>Create at : {{ feed.create_date }}</h4>#}
+    {#            <h4>Expired at : {{ feed.expired_date }}</h4>#}
+    {#        {% endfor %}#}
+    <div class="row justify-content-center">
+        {% for feed in feeds %}
+            <div class="col-12 col-lg-6 col-md-12">
+                <!-- Card -->
+                <div class="card w-100 m-3">
+                    <!-- Card image -->
+                    {% if feed.picture %}
+                        <img class="card-img-top" src="{{ feed.picture.url }}" alt="Card image cap">
+                    {% endif %}
+                    <!-- Card content -->
+                    <div class="card-body">
+
+                        <a href="#!" class="green-text">
+                            <h6 class="h6 pb-1"><i class="fas fa-store pr-1"></i>{{ feed.BarberShop.shopname }}</h6>
+                        </a>
+
+                        <!-- Title -->
+                        <h4 class="card-title"><a>{{ feed.header }}</a></h4>
+                        <!-- Text -->
+                        <p class="card-text">{{ feed.content }}</p>
+
+                        <div class="row">
+                            <div class="col col-example">
+                                <small class="card-text">Created date :
+                                    {{ feed.create_date }}<br>Exp : {{ feed.expired_date }}<br></small>
+                            </div>
+                            <a href="{% url 'detail' feed.BarberShop.id %}"
+                               class="btn btn-primary d-none d-md-none d-lg-block">Go to store</a>
+                        </div>
+                        <a href="{% url 'detail' feed.BarberShop.id %}"
+                           class="btn btn-primary d-block d-md-block d-lg-none">Go to store</a>
+                    </div>
+
+                </div>
+                <!-- Card -->
+            </div>
+        {% endfor %}
+    </div>
+
+
 {% endblock %}

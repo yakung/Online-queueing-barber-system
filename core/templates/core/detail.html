@@ -1,11 +1,29 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}
     Detail
 {% endblock %}
 {% block content %}
-    <img src="{{ BarberShop.pic.url }}" alt="" width="200" height="200">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if shop.pic %}
+        <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
+    {% else %}
+        <img src="{% static 'images/shop_pic/default.jpg' %}" alt="" width="200" height="200">
+    {% endif %}
     <p>Name : {{ BarberShop.shopname }}</p>
     <p>Address : {{ BarberShop.address }}</p>
     <p>Description : {{ BarberShop.description }}</p>
-    <a href="{% url 'reserve' BarberShop.id %}">reserve queue</a>
+    {% if user.is_authenticated %}
+        <form action="" method="post" enctype="multipart/form-data" class="f">
+            {% csrf_token %}
+            {{ QueueForm.as_p }}
+            <input type="submit" value="reserve">
+        </form>
+    {% endif %}
 {% endblock %}

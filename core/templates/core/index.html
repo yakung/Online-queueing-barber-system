@@ -1,28 +1,418 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}
     index
 {% endblock %}
 {% block content %}
     <br>
-    {% if BarberShop_rec %}
-        {% for shop in BarberShop_rec %}
-            <p>BarberShopFilter</p>
-            <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
-            <p>Name : {{ shop.shopname }}</p>
-            <p>Address : {{ shop.address }}</p>
-            <p>Description : {{ shop.description }}</p>
-            <p>Style : {{ shop.style }}</p>
-            <a href="{% url 'detail' shop.id %}">detail</a>
-        {% endfor %}
-    {% else %}
-        {% for shop in BarberShop %}
-            <p>BarberShop</p>
-            <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
-            <p>Name : {{ shop.shopname }}</p>
-            <p>Address : {{ shop.address }}</p>
-            <p>Description : {{ shop.description }}</p>
-            <p>Style : {{ shop.style }}</p>
-            <a href="{% url 'detail' shop.id %}">detail</a>
-        {% endfor %}
-    {% endif %}
+    {#    {% if BarberShop_rec %}#}
+    {#        {% for shop in BarberShop_rec %}#}
+    {#            <p>BarberShopFilter</p>#}
+    {#            {% if shop.pic %}#}
+    {#                <img src="{{ shop.pic.url }}" alt="" width="200" height="200">#}
+    {#            {% else %}#}
+    {#                <img src="{% static 'images/shop_pic/default.jpg' %}" alt="" width="200" height="200">#}
+    {#            {% endif %}#}
+    {#            <p>Name : {{ shop.shopname }}</p>#}
+    {#            <p>Address : {{ shop.address }}</p>#}
+    {#            <p>Description : {{ shop.description }}</p>#}
+    {#            <p>Style : {{ shop.style }}</p>#}
+    {#            <a href="{% url 'detail' shop.id %}">detail</a>#}
+    {#        {% endfor %}#}
+    {#    {% else %}#}
+    {#        {% for shop in BarberShop %}#}
+    {#            <p>BarberShop</p>#}
+    {#            {% if shop.pic %}#}
+    {#                <img src="{{ shop.pic.url }}" alt="" width="200" height="200">#}
+    {#            {% else %}#}
+    {#                <img src="{% static 'images/shop_pic/default.jpg' %}" alt="" width="200" height="200">#}
+    {#            {% endif %}#}
+    {#            <p>Name : {{ shop.shopname }}</p>#}
+    {#            <p>Address : {{ shop.address }}</p>#}
+    {#            <p>Description : {{ shop.description }}</p>#}
+    {#            <p>Style : {{ shop.style }}</p>#}
+    {#            <a href="{% url 'detail' shop.id %}">detail</a>#}
+    {#        {% endfor %}#}
+    {#    {% endif %}#}
+    <div class="container text-center mt-3">
+        <div class="row content">
+            <!-- Filter -->
+            <div class="col-sm-3">
+                <!--Card-->
+                <div class="card card-cascade narrower mb-4" style="margin-top: 28px">
+
+                    <!--Card image-->
+                    <div class="view view-cascade">
+                        <img src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg"
+                             class="card-img-top"
+                             alt="">
+                        <a>
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <!--/.Card image-->
+
+                    <!--Card content-->
+                    <div class="card-body card-body-cascade">
+                        <form class="form-inline md-form mr-auto mb-3">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                            <small>Name shop, Location</small>
+                        </form>
+                        <label class="card-text"> Favourite style</label>
+                        <div class="form-row">
+                            <div class="col">
+                                <!-- First name -->
+                                <input type="text" id="defaultRegisterFormFirstName" class="form-control"
+                                       placeholder="Your Style">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="md-form">
+                            <input type="date" id="inputMDEx" class="form-control">
+                            <label for="inputMDEx">Choose your date</label>
+                        </div>
+                        <button class="btn btn-elegant btn-rounded btn-sm my-0 mb-3" type="submit">Search</button>
+                        <div class="text-center mt-2">
+                            <p class="text-danger">Filter by your self</p>
+                        </div>
+                        <div class="text-left">
+                            <label class="card-text">Rating</label>
+                            <!-- Default unchecked -->
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                                <label class="custom-control-label" for="defaultUnchecked">
+                                    <i class="fas fa-star fa-xs"></i></label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked1">
+                                <label class="custom-control-label" for="defaultUnchecked1">
+                                    <i class="fas fa-star fa-xs"></i><i class="fas fa-star fa-xs"></i></label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked2">
+                                <label class="custom-control-label" for="defaultUnchecked2"><i
+                                        class="fas fa-star fa-xs"></i><i
+                                        class="fas fa-star fa-xs"></i><i class="fas fa-star fa-xs"></i></label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked3">
+                                <label class="custom-control-label" for="defaultUnchecked3"><i
+                                        class="fas fa-star fa-xs"></i><i
+                                        class="fas fa-star fa-xs"></i><i class="fas fa-star fa-xs"></i><i
+                                        class="fas fa-star fa-xs"></i></label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked4">
+                                <label class="custom-control-label" for="defaultUnchecked4"><i
+                                        class="fas fa-star fa-xs"></i><i
+                                        class="fas fa-star fa-xs"></i><i class="fas fa-star fa-xs"></i><i
+                                        class="fas fa-star fa-xs "></i><i
+                                        class="fas fa-star fa-xs"></i></label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="text-left">
+                            <label class="card-text">Services</label>
+                            <!-- Default unchecked -->
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked5">
+                                <label class="custom-control-label" for="defaultUnchecked5">
+                                    <p class="card-text">Sharping</p>
+                            </div>
+                            <div class="custom-control custom-checkbox ">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked6">
+                                <label class="custom-control-label" for="defaultUnchecked6">
+                                    <p class="card-text">Wash Hair</p>
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultUnchecked7">
+                                <label class="custom-control-label" for="defaultUnchecked7">
+                                    <p class="card-text">Message</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.Card content-->
+
+                </div>
+                <!--/.Card-->
+            </div>
+            <!-- Filter  -->
+            <div class="col-sm-9">
+                <!-- Carousel -->
+                <!--Carousel Wrapper-->
+                <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
+                    <!--Indicators-->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-1z" data-slide-to="1"></li>
+                        <li data-target="#carousel-example-1z" data-slide-to="2"></li>
+                    </ol>
+                    <!--/.Indicators-->
+                    <!--Slides-->
+                    <div class="carousel-inner" role="listbox">
+                        <!--First slide-->
+                        <div class="carousel-item active">
+                            <div class="row jumbotron p-3 mx-1 shop">
+                                <div class="col-sm-4">
+                                    <div class="view overlay">
+                                        <img src="https://mdbootstrap.com/img/Photos/Others/laptop-sm.jpg" class="img"
+                                             alt="Sample image for first version of blog listing" height="230">
+                                        <a>
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 text-left"
+                                ">
+                                <a href="#!" class="red-text">
+                                    <h6 class="h6 pb-1"><i class="fas fa-star pr-1"></i> Recommend</h6>
+                                </a>
+                                <h4 class=" h4 mb-4"><i class="fas fa-store pr-1 blue-text"></i> Shop Name</h4>
+
+                                <h5 class="h5" style="font-size: 15px">Describe: </5>
+                                <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Vel,
+                                    ips</p>
+                                <h5 class="h5 mb-4" style="font-size: 15px"> Location: </5>
+                                <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Vel,
+                                    ips</p>
+                                <label style="font-size: 15px">Tel: 0816299017</label>
+                                <br>
+                                <label style="font-size: 15px">Famous Style : รองทรงสูง </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="">
+                                    <p class="font-weight-bold mt-4 ml-5" style="position:absolute;">Rating
+                                    </p>
+                                    <div class="rating-box mx-5 py-2" style="position:relative;z-index: auto;left:50px">
+                                        5
+                                    </div>
+                                    <small>120 comments in this shop</small>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-primary ml-5">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/First slide-->
+                    <!--Second slide-->
+                    <div class="carousel-item">
+                        <div class="row jumbotron p-3 mx-1 shop">
+                            <div class="col-sm-4">
+                                <div class="view overlay">
+                                    <img src="https://mdbootstrap.com/img/Photos/Others/laptop-sm.jpg" class="img"
+                                         alt="Sample image for first version of blog listing" height="230">
+                                    <a>
+                                        <div class="mask rgba-white-slight"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 text-left">
+                                <a href="#!" class="red-text">
+                                    <h6 class="h6 pb-1"><i class="fas fa-star pr-1"></i> Recommend</h6>
+                                </a>
+                                <h4 class=" h4 mb-4"><i class="fas fa-store pr-1 blue-text"></i> Shop Name</h4>
+
+                                <h5 class="h5" style="font-size: 15px">Describe: </5>
+                                <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Vel,
+                                    ips</p>
+                                <h5 class="h5 mb-4" style="font-size: 15px"> Location: </5>
+                                <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Vel,
+                                    ips</p>
+                                <label style="font-size: 15px">Tel: 0816299017</label>
+                                <br>
+                                <label style="font-size: 15px">Famous Style : รองทรงสูง </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="">
+                                    <p class="font-weight-bold mt-4 ml-5" style="position:absolute;">Rating
+                                    </p>
+                                    <div class="rating-box mx-5 py-2" style="position:relative;z-index: auto;left:50px">
+                                        5
+                                    </div>
+                                    <small>120 comments in this shop</small>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-primary ml-5">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Second slide-->
+                    <!--Third slide-->
+                    <div class="carousel-item">
+                        <!-- Shop -->
+                        <div class="row jumbotron p-3 mx-1 shop">
+                            <div class="col-sm-4">
+                                <div class="view overlay">
+                                    <img src="https://mdbootstrap.com/img/Photos/Others/laptop-sm.jpg" class="img"
+                                         alt="Sample image for first version of blog listing" height="230">
+                                    <a>
+                                        <div class="mask rgba-white-slight"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 text-left"
+                            ">
+                            <a href="#!" class="red-text">
+                                <h6 class="h6 pb-1"><i class="fas fa-star pr-1"></i> Recommend</h6>
+                            </a>
+                            <h4 class=" h4 mb-4"><i class="fas fa-store pr-1 blue-text"></i> Shop Name</h4>
+
+                            <h5 class="h5" style="font-size: 15px">Describe: </5>
+                            <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+                                ips</p>
+                            <h5 class="h5 mb-4" style="font-size: 15px"> Location: </5>
+                            <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+                                ips</p>
+                            <label style="font-size: 15px">Tel: 0816299017</label>
+                            <br>
+                            <label style="font-size: 15px">Famous Style : รองทรงสูง </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="">
+                                <p class="font-weight-bold mt-4 ml-5" style="position:absolute;">Rating
+                                </p>
+                                <div class="rating-box mx-5 py-2" style="position:relative;z-index: auto;left:50px">5
+                                </div>
+                                <small>120 comments in this shop</small>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <button type="button" class="btn btn-primary ml-5">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Shop -->
+                </div>
+                <!--/Third slide-->
+            </div>
+            <!--/.Slides-->
+            <!--Controls-->
+            <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            <!--/.Controls-->
+        </div>
+        <!--/.Carousel Wrapper-->
+        <!-- List of Shop -->
+        <!-- Shop -->
+        <div class="row jumbotron p-3 mx-1 shop">
+            <div class="col-sm-4">
+                <div class="view overlay">
+
+                    <img src="https://mdbootstrap.com/img/Photos/Others/laptop-sm.jpg" class="img"
+                         alt="Sample image for first version of blog listing" height="230">
+                    <a>
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-5 text-left">
+            <h4 class=" h4 mb-4"><i class="fas fa-store pr-1 blue-text"></i> Shop Name</h4>
+            <h5 class="h5" style="font-size: 15px">Describe: </h5>
+            <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+                ips</p>
+            <h5 class="h5 mb-4" style="font-size: 15px"> Location: </5>
+            <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+                ips</p>
+            <label style="font-size: 15px">Tel: 0816299017</label>
+            <br>
+            <label style="font-size: 15px">Famous Style : รองทรงสูง </label>
+        </div>
+        <div class="col-sm-3">
+            <div class="">
+                <p class="font-weight-bold mt-4 ml-5" style="position:absolute;">Rating
+                </p>
+                <div class="rating-box mx-5 py-2" style="position:relative;z-index: auto;left:50px">5</div>
+                <small>120 comments in this shop</small>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <button type="button" class="btn btn-primary ml-5">Details</button>
+            </div>
+        </div>
+    </div>
+    <!-- Shop -->
+    <!-- Shop -->
+    <div class="row jumbotron p-3 mx-1 shop">
+        <div class="col-sm-4">
+            <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Others/laptop-sm.jpg" class="img"
+                     alt="Sample image for first version of blog listing" height="230">
+                <a>
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5 text-left"
+        ">
+        <h4 class=" h4 mb-4"><i class="fas fa-store pr-1 blue-text"></i> Shop Name</h4>
+
+        <h5 class="h5" style="font-size: 15px">Describe: </5>
+        <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+            ips</p>
+        <h5 class="h5 mb-4" style="font-size: 15px"> Location: </5>
+        <p class="font-weight-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel,
+            ips</p>
+        <label style="font-size: 15px">Tel: 0816299017</label>
+        <br>
+        <label style="font-size: 15px">Famous Style : รองทรงสูง </label>
+    </div>
+    <div class="col-sm-3">
+        <div class="">
+            <p class="font-weight-bold mt-4 ml-5" style="position:absolute;">Rating
+            </p>
+            <div class="rating-box mx-5 py-2" style="position:relative;z-index: auto;left:50px">5</div>
+            <small>120 comments in this shop</small>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button type="button" class="btn btn-primary ml-5">Details</button>
+        </div>
+    </div>
+    </div>
+    <!-- Shop -->
+    <!-- List of Shop -->
+    </div>
+    </div>
+    </div>
 {% endblock %}

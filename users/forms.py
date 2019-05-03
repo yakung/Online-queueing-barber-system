@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import validate_email
 
+from core.models import Review
 from users.models import BarberShop, Customer
 
 
@@ -35,14 +36,18 @@ class RegisterCustomerForm(forms.Form):
     gender.widget.attrs['class'] = "fontt"
 
     def clean_name(self):
-        data = self.cleaned_data['username']
+        data = self.cleaned_data['name']
         if not data:
             raise forms.ValidationError("โปรดใส่ชื่อลูกค้า")
+
+        return data
 
     def clean_username(self):
         data = self.cleaned_data['username']
         if not data:
             raise forms.ValidationError("โปรดใส่ชื่อผู้ใช้")
+
+        return data
 
     def clean_style(self):
         data = self.cleaned_data['style']
@@ -244,4 +249,7 @@ class CustomerForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='username', required=False, )
+    username.widget.attrs['class']='form-control mb-4'
     password = forms.CharField(label="password", required=False, widget=forms.PasswordInput)
+    password.widget.attrs['class'] = 'form-control mb-4'
+

@@ -6,7 +6,7 @@
 {% block style %}
 {% endblock %}
 {% block content %}
-    <h2 class="text-lg-center my-4">Sign In</h2>
+    <h1 class="p-4 text-center"><span class="badge badge-pill badge-info">Login</span></h1>
     <hr>
     <br>
     {% if error %}
@@ -14,11 +14,19 @@
             <strong>{{ error }}</strong>
         </div>
     {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
     <div class="p-3">
         <form action="" method="POST">
             {% csrf_token %}
             {{ form|crispy }}
-            <small class="float-right my-3"><a href="{% url 'choose' %}" style="color: black">Did you register ?</a></small>
+            <small class="float-right my-3"><a href="{% url 'choose' %}" style="color: black">Did you register ?</a>
+            </small>
             <input type="submit" value="sign in" class="btn btn-primary w-100">
 
         </form>

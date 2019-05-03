@@ -4,12 +4,12 @@
     Register
 {% endblock %}
 {% block content %}
-<h2 class="text-center my-4">Register</h2>
+    <h1 class="p-4 text-center"><span class="badge badge-pill badge-light">Register</span></h1>
     <hr>
     <br>
     <div class="card border-dark">
         <div class="card-body p-5">
-            <form action="" method="POST">
+            <form action="" method="POST" class="f">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <input type="submit" value="sign up" class="btn btn-primary w-100">

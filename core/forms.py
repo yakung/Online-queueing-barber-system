@@ -1,9 +1,12 @@
 from django import forms
 
+from core.models import Review
+
+
 class BlogForm(forms.Form):
-    header = forms.CharField(max_length=255)
-    content = forms.CharField(widget=forms.Textarea, required=False)
-    picture = forms.ImageField(required=False)
+    header = forms.CharField(label='หัวข้อ' ,max_length=255, required=False)
+    content = forms.CharField(label='บทความ',widget=forms.Textarea, required=False)
+    picture = forms.ImageField(label='รูปภาพ',required=False)
 
     def clean_header(self):
         data = self.cleaned_data['header']
@@ -17,3 +20,12 @@ class BlogForm(forms.Form):
         if not data:
             raise forms.ValidationError('โปรดเขียนรายละเอียด')
         return data
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        exclude = ['customer', 'barbershop', 'date']
+        labels={
+            'description':'คำอธิายเกี่ยวกับร้าน',
+            'rating':'ให้คะแนนร้าน',
+        }
