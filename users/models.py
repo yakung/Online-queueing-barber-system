@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+from django.db.models import Avg, Count
+from django.db.models.functions import Round
 
 
 class BarberShop(models.Model):
@@ -12,6 +14,13 @@ class BarberShop(models.Model):
     style = models.CharField(null=False, max_length=100)
     description = models.TextField()
     pic = models.ImageField(upload_to='shop_pic', default='shop_pic/default.jpg')
+
+    def get_review(self):
+        return self.review_set.all()
+    def get_review_count(self):
+        return self.review_set.aggregate(amount_review = Count('id'))
+    def get_review_score(self):
+        return self.review_set.aggregate(avg_rating = Round(Avg('rating')))
     def __str__(self):
         return self.shopname
 

@@ -222,7 +222,14 @@ class ChangePasswordForm(forms.Form):
                 self.add_error('new_password1', "รหัสผ่านใหม่ต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
                 self.add_error('new_password2', "รหัสผ่านใหม่ต้องมีตัวอักษรมากกว่า 8 ตัวอักษร")
 
+
 class BarberShopForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(BarberShopForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['pic'].required = False
+
     class Meta:
         model = BarberShop
         fields = ['shopname', 'tel', 'address', 'style', 'description', 'pic']

@@ -11,8 +11,8 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% if shop.pic %}
-        <img src="{{ shop.pic.url }}" alt="" width="200" height="200">
+    {% if BarberShop.pic %}
+        <img src="{{ BarberShop.pic.url }}" alt="" width="200" height="200">
     {% else %}
         <img src="{% static 'images/shop_pic/default.jpg' %}" alt="" width="200" height="200">
     {% endif %}

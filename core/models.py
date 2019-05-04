@@ -20,13 +20,13 @@ class Review(models.Model):
     barbershop = models.ForeignKey(BarberShop, on_delete=models.CASCADE)
     description = models.TextField()
     score = (
-        ('01', '1'),
-        ('02', '2'),
-        ('03', '3'),
-        ('04', '4'),
-        ('05', '5')
+        ('01', 1),
+        ('02', 2),
+        ('03', 3),
+        ('04', 4),
+        ('05', 5)
     )
-    rating = models.CharField(choices=score, default='01', max_length=2)
+    rating = models.IntegerField(choices=score, default='01')
     date = models.DateField(auto_now_add=True)
 
 

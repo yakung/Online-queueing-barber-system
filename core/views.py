@@ -1,4 +1,7 @@
 from datetime import datetime, timedelta
+
+from django.db.models import Q, Avg
+from django.db.models.functions import Round
 from pytz import timezone
 from dateutil.parser import parse
 from django.contrib import messages
@@ -16,6 +19,35 @@ def index(req):
     context = {}
     group = ""
     flag = ""
+    shop = BarberShop.objects.all()
+    if req.method == 'POST':
+        search = req.POST.get('search')
+        style = req.POST.get('style')
+        rate = req.POST.get('rate')
+        print(rate)
+        shop = BarberShop.objects.all()
+        if search != '':
+            print(1)
+            shop = BarberShop.objects.filter(Q(shopname__icontains=search) | Q(address__icontains=search))
+            if style != '':
+                print(2)
+                shop = BarberShop.objects.filter((Q(shopname__icontains=search) | Q(address__icontains=search)),
+                                                 Q(style__icontains=style))
+        elif style != '':
+            print(3)
+            shop = BarberShop.objects.filter(Q(style__icontains=style))
+            if search != '':
+                print(4)
+                shop = BarberShop.objects.filter((Q(shopname__icontains=search) | Q(address__icontains=search)),
+                                                 Q(style__icontains=style))
+        elif rate != '0' and rate:
+            print(5)
+            shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(avg_rating=rate)
+        elif rate == '0' and rate:
+            print(6)
+            shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(avg_rating=None)
+
+    # Get style
     if str(req.user) != "AnonymousUser":
         group = req.user.groups.filter(name__in=['BarberShop', 'Customer'])
         try:
@@ -26,8 +58,8 @@ def index(req):
             cus_profile = Customer.objects.get(user_id=req.user.id)
             style = cus_profile.style
             if (style):
-                context['BarberShop_rec'] = BarberShop.objects.filter(style__contains=style)
-    context['BarberShop'] = BarberShop.objects.all()
+                context['style'] = style
+    context['BarberShop'] = shop
     context['group'] = str(group)
 
     return render(req, 'core/index.html', context)
@@ -38,17 +70,17 @@ def detail(req, shop_id):
     if req.method == 'POST':
         queueform = QueueForm(req.POST, req.FILES)
         if queueform.is_valid() and req.user.groups.filter(name='Customer').exists():
-            dt = parse(str(queueform.cleaned_data.get('end_queue'))+' 09:00:00')
+            dt = parse(str(queueform.cleaned_data.get('end_queue')) + ' 09:00:00')
             print(dt.time())
             Queue.objects.create(
                 barbershop=BarberShop.objects.get(id=shop_id),
                 customer=Customer.objects.get(user_id=req.user.id),
-                start_queue=parse(str(queueform.cleaned_data.get('start_queue'))+' 08:00:00'),
-                end_queue=parse(str(queueform.cleaned_data.get('end_queue'))+' 09:00:00'),
+                start_queue=parse(str(queueform.cleaned_data.get('start_queue')) + ' 08:00:00'),
+                end_queue=parse(str(queueform.cleaned_data.get('end_queue')) + ' 09:00:00'),
                 ref_pic=queueform.cleaned_data.get('ref_pic'),
                 hairstyle=queueform.cleaned_data.get('hairstyle')
             )
-            messages.success(req,'จองคิวสำเร็จ')
+            messages.success(req, 'จองคิวสำเร็จ')
             return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
@@ -78,8 +110,8 @@ def dashboard(req):
         status = req.POST.get('status')
         print(status)
         update = None
-        if(status):
-            if(status=='03'):
+        if (status):
+            if (status == '03'):
                 q = Queue.objects.get(id=req.POST.get('qid'))
                 h = History.objects.create(
                     customer=q.customer,
@@ -90,7 +122,7 @@ def dashboard(req):
                 )
                 q.delete()
                 print('delete q 03')
-            elif status=='04':
+            elif status == '04':
                 q = Queue.objects.get(id=req.POST.get('qid'))
                 h = History.objects.create(
                     customer=q.customer,
@@ -105,7 +137,7 @@ def dashboard(req):
                 update = Queue.objects.filter(id=req.POST.get('qid')).update(
                     status=status
                 )
-            if(update):
+            if (update):
                 context['success'] = 'อัพเดทสถานะสำเร็จ'
         else:
             context['error'] = 'โปรดเลือกสถานะ'
@@ -121,7 +153,7 @@ def dashboard(req):
             context['success'] = 'โปรโมทสำเร็จ'
     else:
         form = BlogForm()
-    context['queues']=Queue.objects.filter(barbershop_id=shop.id).order_by('start_queue')
+    context['queues'] = Queue.objects.filter(barbershop_id=shop.id).order_by('start_queue')
     context['blogform'] = form
     return render(req, 'core/dashboard.html', context)
 
@@ -143,6 +175,7 @@ def blog(req):
 def is_customer(user):
     return user.groups.filter(name='Customer').exists()
 
+
 @login_required()
 @user_passes_test(is_customer)
 def review(req, shop_id, h_id):
@@ -154,8 +187,8 @@ def review(req, shop_id, h_id):
         form = ReviewForm(req.POST)
         if form.is_valid():
             Review.objects.create(
-                barbershop= shop,
-                customer= customer,
+                barbershop=shop,
+                customer=customer,
                 description=form.cleaned_data.get('description'),
                 rating=form.cleaned_data.get('rating')
             )

@@ -1,3 +1,5 @@
+from _datetime import datetime
+
 from django import forms
 
 from .models import Queue
@@ -28,6 +30,10 @@ class QueueForm(forms.ModelForm):
 
         if (not data):
             raise forms.ValidationError('โปรดใส่เวลาจองคิว')
+
+        if data < datetime.now().date():
+            raise forms.ValidationError('ไม่สามารถเลือกวันในอดีตได้')
+
         return data
 
     def clean_end_queue(self):
@@ -36,4 +42,14 @@ class QueueForm(forms.ModelForm):
         if (not data):
             raise forms.ValidationError('โปรดใส่เวลาจองคิว')
 
+        if data < datetime.now().date():
+            raise forms.ValidationError('ไม่สามารถเลือกวันในอดีตได้')
+
         return data
+
+    def clean(self):
+        clean = super().clean()
+        day1 = clean.get('start_queue')
+        day2 = clean.get('end_queue')
+        if day2 < day1:
+            self.add_error('end_queue', 'วันที่ไม่ถูกต้อง')
