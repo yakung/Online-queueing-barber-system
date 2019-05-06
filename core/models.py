@@ -27,7 +27,7 @@ class Review(models.Model):
     #     ('05', 5),
     # )
     rating = models.IntegerField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField()
 
 
 

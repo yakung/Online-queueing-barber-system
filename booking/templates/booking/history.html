@@ -5,17 +5,17 @@
 {% block content %}
     <h1 class="p-4 text-center"><span class="badge badge-pill badge-light p-3">History</span></h1>
 
-    {% if messages.success %}
-        {% for message in messages.success %}
-            <div class="alert alert-success">
-                <strong>{{ message }}</strong>
-            </div>
-        {% endfor %}
-    {% elif messages.error %}
-        {% for message in messages.error %}
-            <div class="alert alert-danger">
-                <strong>{{ message }}</strong>
-            </div>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success">
+                    <strong>{{ message }}</strong>
+                </div>
+            {% elif message.tags == 'error' %}
+                <div class="alert alert-danger">
+                    <strong>{{ message }}</strong>
+                </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
     <hr>

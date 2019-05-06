@@ -14,13 +14,14 @@
             <strong>{{ error }}</strong>
         </div>
     {% endif %}
-    {% if messages.error %}
-        {% for message in messages.error %}
+    {% if messages.tags == 'error' %}
+        {% for message in messages %}
             <div class="alert alert-danger">
                 <strong>{{ message }}</strong>
             </div>
         {% endfor %}
     {% endif %}
+
     <div class="p-3">
         <form action="" method="POST">
             {% csrf_token %}

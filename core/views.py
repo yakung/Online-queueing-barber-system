@@ -12,7 +12,7 @@ from booking.models import Queue, History
 from .models import Blog, Review
 from .forms import BlogForm, ReviewForm
 from users.models import BarberShop, Customer
-
+from django.contrib.auth.models import Group
 
 def index(req):
     context = {}
@@ -46,8 +46,14 @@ def index(req):
             print(6)
             shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(avg_rating=None)
 
+    cs, created = Group.objects.get_or_create(name='Customer')
+    if (created):
+        cs, created = Group.objects.get_or_create(name='Customer')
+    bs, createdB = Group.objects.get_or_create(name='BarberShop')
+    if (createdB):
+        bs, createdB = Group.objects.get_or_create(name='Customer')
     # Get style
-    if str(req.user) != "AnonymousUser":
+    if str(req.user) != "AnonymousUser" and (cs or created) and (bs or createdB):
         group = req.user.groups.filter(name__in=['BarberShop', 'Customer'])
         try:
             flag = Customer.objects.get(user_id=req.user.id)
@@ -66,10 +72,10 @@ def index(req):
 
 def detail(req, shop_id):
     q = Queue.objects.filter(barbershop_id=shop_id)
-    review = Review.objects.filter(barbershop_id=shop_id).order_by('-date')[0:3]
+    review = Review.objects.filter(barbershop_id=shop_id).order_by('-date')
     blogs = Blog.objects.filter(BarberShop_id=shop_id).order_by('-create_date')[0:2]
     queues = []
-    success=None
+    success = None
     for i in q:
         print(i)
         queue = {
@@ -87,7 +93,7 @@ def detail(req, shop_id):
                 ref_pic=req.FILES.get('pic'),
                 hairstyle=req.POST.get('hairstyle')
             )
-            success = 'จองคิวสำเร็จ'
+            messages.success(req,'จองคิวสำเร็จ')
             return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
@@ -95,9 +101,9 @@ def detail(req, shop_id):
     context = {
         'BarberShop': BarberShop.objects.get(id=shop_id),
         'queue': json.dumps(queues, indent=4, sort_keys=True, default=str),
-        'review':review,
-        'blogs':blogs,
-        'success':success
+        'review': review,
+        'blogs': blogs,
+        'success': success
     }
     return render(req, 'core/detail.html', context)
 
@@ -126,7 +132,7 @@ def dashboard(req):
                     barbershop=q.barbershop,
                     start_queue=q.start_queue,
                     end_queue=q.end_queue,
-                    status='03'
+                    status='03',
                 )
                 update = Queue.objects.filter(id=req.POST.get('qid')).update(
                     status=status)
@@ -199,7 +205,8 @@ def review(req, shop_id, h_id):
                 barbershop=shop,
                 customer=customer,
                 description=form.cleaned_data.get('description'),
-                rating=int(req.POST.get('rating'))
+                rating=int(req.POST.get('rating')),
+                date=timezone('Etc/GMT+7').localize(datetime.now())
             )
 
             History.objects.filter(id=h_id).update(

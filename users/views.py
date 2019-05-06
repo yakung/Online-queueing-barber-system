@@ -84,7 +84,9 @@ def register_barber(req):
                 u = User.objects.create_user(username=form.cleaned_data.get('username'),
                                              email=form.cleaned_data.get('email'),
                                              password=form.cleaned_data.get('pass1'))
-                bsg = Group.objects.get(name='BarberShop')
+                bsg, created = Group.objects.get_or_create(name='BarberShop')
+                if(created):
+                    bsg, created = Group.objects.get_or_create(name='BarberShop')
                 bsg.user_set.add(u)
                 BarberShop.objects.create(
                     user=u,
@@ -114,7 +116,9 @@ def register_customer(req):
                 u = User.objects.create_user(username=form.cleaned_data.get('username'),
                                              email=form.cleaned_data.get('email'),
                                              password=form.cleaned_data.get('pass1'))
-                cs = Group.objects.get(name='Customer')
+                cs, created = Group.objects.get_or_create(name='Customer')
+                if (created):
+                    cs, created = Group.objects.get_or_create(name='Customer')
                 cs.user_set.add(u)
                 Customer.objects.create(
                     user=u,
