@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'oqbs',
         'HOST': '127.0.0.1',
         'USER': 'root',
-        'PASSWORD': 'error101pt',
+        'PASSWORD': '',
         'PORT': '3306',
     }
 }
