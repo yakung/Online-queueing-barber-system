@@ -26,5 +26,5 @@ class ReviewForm(forms.ModelForm):
         model = Review
         exclude = ['customer', 'barbershop', 'date', 'rating']
         labels={
-            'description':'คำอธิายเกี่ยวกับร้าน',
+            'description':'คำอธิบายเกี่ยวกับร้าน',
         }

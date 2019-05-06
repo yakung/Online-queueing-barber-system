@@ -69,6 +69,7 @@ def detail(req, shop_id):
     review = Review.objects.filter(barbershop_id=shop_id).order_by('-date')[0:3]
     blogs = Blog.objects.filter(BarberShop_id=shop_id).order_by('-create_date')[0:2]
     queues = []
+    success=None
     for i in q:
         print(i)
         queue = {
@@ -86,7 +87,7 @@ def detail(req, shop_id):
                 ref_pic=req.FILES.get('pic'),
                 hairstyle=req.POST.get('hairstyle')
             )
-            messages.success(req, 'จองคิวสำเร็จ')
+            success = 'จองคิวสำเร็จ'
             return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
@@ -95,7 +96,8 @@ def detail(req, shop_id):
         'BarberShop': BarberShop.objects.get(id=shop_id),
         'queue': json.dumps(queues, indent=4, sort_keys=True, default=str),
         'review':review,
-        'blogs':blogs
+        'blogs':blogs,
+        'success':success
     }
     return render(req, 'core/detail.html', context)
 
@@ -119,16 +121,18 @@ def dashboard(req):
         if (status):
             if (status == '03'):
                 q = Queue.objects.get(id=req.POST.get('qid'))
-                h = History.objects.create(
+                h = History.objects.get_or_create(
                     customer=q.customer,
                     barbershop=q.barbershop,
                     start_queue=q.start_queue,
                     end_queue=q.end_queue,
                     status='03'
                 )
+                update = Queue.objects.filter(id=req.POST.get('qid')).update(
+                    status=status)
             elif status == '04':
                 q = Queue.objects.get(id=req.POST.get('qid'))
-                h = History.objects.create(
+                h = History.objects.get_or_create(
                     customer=q.customer,
                     barbershop=q.barbershop,
                     start_queue=q.start_queue,

@@ -15,12 +15,11 @@
     {#        </form>#}
     {#    {% endif %}#}
     <div id="app">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-success">
-                    <strong>{{ message }}</strong>
-                </div>
-            {% endfor %}
+
+        {% if success %}
+            <div class="alert alert-success">
+                <strong>{{ success }}</strong>
+            </div>
         {% endif %}
         <div class="jumbotron text-center p-5 container">
             <!-- Title -->
@@ -266,13 +265,13 @@
                     >
                         <div class=" text-center">
 
-                            <h4>
+                            <h4>which psql
                                 <small>RECENT POSTS</small>
                             </h4>
                             <hr/>
                             {% for b in blogs %}
                                 {% if b.picture %}
-                                <img src="{{ b.picture.url }}" class="w-25 h-25"/>
+                                    <img src="{{ b.picture.url }}" class="w-25 h-25"/>
                                 {% endif %}
                                 <h2 class="mt-2">{{ b.header }}</h2>
                                 <h5>

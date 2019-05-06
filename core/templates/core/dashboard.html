@@ -1,9 +1,15 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block title %}
     Dashboard
 {% endblock %}
 {% block content %}
+    <style>
+        .zoom:hover {
+            transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+    </style>
     <h1 class="p-4"><span class="badge badge-pill badge-light">Dashboard</span></h1>
     <hr>
     {% if success %}
@@ -94,11 +100,24 @@
             </thead>
 
             {% for q in queues %}
+                {% if q.status != '03' %}
                 <tr>
                     <td style="font-size: 1.25em">{{ q.start_queue }}</td>
                     <td style="font-size: 1.25em">{{ q.end_queue }}</td>
                     <td style="font-size: 1.25em">{{ q.hairstyle }}</td>
-                    <td><img src="{{ q.ref_pic.url }}" alt="" width="80" height="80"></td>
+                    <td>
+                        {% if q.ref_pic %}
+                            <div class="zoom">
+                                <img src="{{ q.ref_pic.url }}" alt="" width="80" height="80">
+                            </div>
+
+                        {% else %}
+                            <div class="zoom">
+                                <img src="{% static 'images/ref_queue_pic/default.jpg' %}" alt="" width="80"
+                                     height="80">
+                            </div>
+                        {% endif %}
+                    </td>
                     <td style="font-size: 1.25em">{{ q.customer.name }}</td>
                     <td>
                         {% if q.status == '01' %}
@@ -138,6 +157,7 @@
 
 
                 </tr>
+                {% endif %}
             {% endfor %}
         </table>
     </div>

@@ -14,8 +14,8 @@
             <strong>{{ error }}</strong>
         </div>
     {% endif %}
-    {% if messages %}
-        {% for message in messages %}
+    {% if messages.error %}
+        {% for message in messages.error %}
             <div class="alert alert-danger">
                 <strong>{{ message }}</strong>
             </div>
