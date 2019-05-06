@@ -35,6 +35,13 @@ def _login(req):
                     return redirect(next_url)
                 else:
                     return redirect('/dashboard')
+            elif user and str(groupname) == 'Admin':
+                login(req, user)
+                next_url = req.POST.get('next_url')  # hidden field input name
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('/dashboard')
             else:
                 context['error'] = 'Wrong username or password'
     next_url = req.GET.get('next')

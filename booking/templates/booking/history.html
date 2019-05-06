@@ -5,9 +5,15 @@
 {% block content %}
     <h1 class="p-4 text-center"><span class="badge badge-pill badge-light p-3">History</span></h1>
 
-    {% if messages %}
-        {% for message in messages %}
+    {% if messages.success %}
+        {% for message in messages.success %}
             <div class="alert alert-success">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% elif messages.error %}
+        {% for message in messages.error %}
+            <div class="alert alert-danger">
                 <strong>{{ message }}</strong>
             </div>
         {% endfor %}
@@ -21,6 +27,7 @@
             <td style="font-size: 1.25em">ถึง</td>
             <td style="font-size: 1.25em">ชื่อร้าน</td>
             <td style="font-size: 1.25em">สถานะ</td>
+            <td style="font-size: 1.25em">ยกเลิก</td>
         </tr>
         </thead>
 
@@ -31,11 +38,19 @@
                 <td style="font-size: 1.25em">{{ q.barbershop.shopname }}</td>
                 <td>
                     {% if q.status == '01' %}
-                        <span class="badge badge-light" style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        <span class="badge badge-light" style="font-size: 1.25em">รอคิว</span>
                     {% elif q.status == '02' %}
-                        <span class="badge badge-warning"
-                              style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                        <span class="badge badge-warning f"
+                              style="font-size: 1.25em">กำลังตัด</span>
                     {% endif %}
+                </td>
+                <td>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ q.id }}" name="qid">
+                        <input type="submit" value="ยกเลิก" class="btn btn-danger"
+                               style="font-size: 0.7em;border-radius: 10em">
+                    </form>
                 </td>
             </tr>
         {% endfor %}
@@ -48,10 +63,10 @@
     <table class="table f">
         <thead class="black white-text">
         <tr>
-            <td  style="font-size: 1.25em">เริ่ม</td>
-            <td  style="font-size: 1.25em">ถึง</td>
-            <td  style="font-size: 1.25em">ชื่อร้าน</td>
-            <td  style="font-size: 1.25em">สถานะ</td>
+            <td style="font-size: 1.25em">เริ่ม</td>
+            <td style="font-size: 1.25em">ถึง</td>
+            <td style="font-size: 1.25em">ชื่อร้าน</td>
+            <td style="font-size: 1.25em">สถานะ</td>
         </tr>
         </thead>
         {% for q in queues_history %}
@@ -62,14 +77,14 @@
                 <td>
 
                     {% if q.status == '03' %}
-                        <a href="{% url 'review' q.barbershop.id q.id %}" class="btn btn-light" ,
-                           style="font-size: 0.7em;border-radius: 10em">Review</a>
+                        <a href="{% url 'review' q.barbershop.id q.id %}" class="btn btn-light f" ,
+                           style="font-size: 1em;border-radius: 10em">รีวิว</a>
                     {% elif q.status == '04' %}
-                        <span class="badge badge-danger"
-                              style="font-size: 1.25em;opacity: 0.4;">{{ q.get_status_display }}</span>
+                        <span class="badge badge-danger f "
+                              style="font-size: 1.25em;opacity: 0.4;">ล้มเลว</span>
                     {% elif q.status == '05' %}
-                        <span class="badge badge-success"
-                              style="font-size: 1.25em;opacity: 0.4;">{{ q.get_status_display }}</span>
+                        <span class="badge badge-success "
+                              style="font-size: 1.25em;opacity: 0.4;">สำเร็จ</span>
                     {% endif %}
                 </td>
             </tr>

@@ -24,8 +24,7 @@ class BlogForm(forms.Form):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        exclude = ['customer', 'barbershop', 'date']
+        exclude = ['customer', 'barbershop', 'date', 'rating']
         labels={
             'description':'คำอธิายเกี่ยวกับร้าน',
-            'rating':'ให้คะแนนร้าน',
         }

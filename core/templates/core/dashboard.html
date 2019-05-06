@@ -18,7 +18,7 @@
     <h3 class="my-4 text-left"><span class="badge badge-pill badge-info p-3">Queue</span></h3>
 
 
-    <div class="table-responsive-md d-none d-xs-none d-lg-none d-sm-none d-md-block">
+    <div class="table-responsive-md d-lg-none d-sm-block d-md-block">
         <table class="table">
             <thead class="black white-text">
             <tr>
@@ -31,47 +31,50 @@
             </thead>
 
             {% for q in queues %}
-                <tr>
-                    <td style="font-size: 1.25em;">{{ q.start_queue }}</td>
-                    <td style="font-size: 1.25em">{{ q.end_queue }}</td>
-                    <td style="font-size: 1.25em">{{ q.customer.name }}</td>
-                    <td>
-                        {% if q.status == '01' %}
-                            <span class="badge badge-light" style="font-size: 1.25em">{{ q.get_status_display }}</span>
-                        {% elif q.status == '02' %}
-                            <span class="badge badge-warning"
-                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
-                        {% elif q.status == '03' %}
-                            <span class="badge badge-success"
-                                  style="font-size: 1.25em">{{ q.get_status_display }}</span>
-                        {% elif q.status == '04' %}
-                            <span class="badge badge-danger" style="font-size: 1.25em">{{ q.get_status_display }}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div>
-                            <form action="" method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <input type="hidden" value="{{ q.id }}" name="qid">
-                                    <select class="browser-default custom-select" name="status">
-                                        <option value="" disabled selected>เลือกสถานะ</option>
-                                        <option value="01">waiting</option>
-                                        <option value="02">processing</option>
-                                        <option value="03">finish</option>
-                                        <option value="04">delete</option>
-                                    </select>
-                                </div>
+                {% if q.status != '03' %}
+                    <tr>
+                        <td style="font-size: 1.25em;">{{ q.start_queue }}</td>
+                        <td style="font-size: 1.25em">{{ q.end_queue }}</td>
+                        <td style="font-size: 1.25em">{{ q.customer.name }}</td>
+                        <td>
+                            {% if q.status == '01' %}
+                                <span class="badge badge-light"
+                                      style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                            {% elif q.status == '02' %}
+                                <span class="badge badge-warning"
+                                      style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                            {% elif q.status == '03' %}
+                                <span class="badge badge-success"
+                                      style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                            {% elif q.status == '04' %}
+                                <span class="badge badge-danger"
+                                      style="font-size: 1.25em">{{ q.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="hidden" value="{{ q.id }}" name="qid">
+                                        <select class="browser-default custom-select" name="status">
+                                            <option value="" disabled selected>เลือกสถานะ</option>
+                                            <option value="02">กำลังตัด</option>
+                                            <option value="03">สำเร็จ</option>
+                                            <option value="04">ยกเลิก</option>
+                                        </select>
+                                    </div>
 
-                                <div class="form-group">
-                                    <input type="submit" value="update" class="btn btn-primary"
-                                           style="border-radius: 10em">
-                                </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="update" class="btn btn-primary"
+                                               style="border-radius: 10em">
+                                    </div>
 
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </table>
     </div>
@@ -118,9 +121,9 @@
                                     <input type="hidden" value="{{ q.id }}" name="qid">
                                     <select class="browser-default custom-select" name="status">
                                         <option value="" disabled selected>เลือกสถานะ</option>
-                                        <option value="02">processing</option>
-                                        <option value="03">finish</option>
-                                        <option value="04">delete</option>
+                                        <option value="02">กำลังตัด</option>
+                                        <option value="03">สำเร็จ</option>
+                                        <option value="04">ยกเลิก</option>
                                     </select>
                                 </div>
 

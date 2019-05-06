@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+import json
 from django.db.models import Q, Avg
 from django.db.models.functions import Round
 from pytz import timezone
@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 # Create your views here.
-from booking.forms import QueueForm
 from booking.models import Queue, History
 from .models import Blog, Review
 from .forms import BlogForm, ReviewForm
@@ -66,30 +65,37 @@ def index(req):
 
 
 def detail(req, shop_id):
-    print(BarberShop.objects.get(id=shop_id))
+    q = Queue.objects.filter(barbershop_id=shop_id)
+    review = Review.objects.filter(barbershop_id=shop_id).order_by('-date')[0:3]
+    blogs = Blog.objects.filter(BarberShop_id=shop_id).order_by('-create_date')[0:2]
+    queues = []
+    for i in q:
+        print(i)
+        queue = {
+            'start_date': i.start_queue,
+            'end_date': i.end_queue
+        }
+        queues.append(queue)
     if req.method == 'POST':
-        queueform = QueueForm(req.POST, req.FILES)
-        if queueform.is_valid() and req.user.groups.filter(name='Customer').exists():
-            dt = parse(str(queueform.cleaned_data.get('end_queue')) + ' 09:00:00')
-            print(dt.time())
+        if req.user.groups.filter(name='Customer').exists():
             Queue.objects.create(
                 barbershop=BarberShop.objects.get(id=shop_id),
                 customer=Customer.objects.get(user_id=req.user.id),
-                start_queue=parse(str(queueform.cleaned_data.get('start_queue')) + ' 08:00:00'),
-                end_queue=parse(str(queueform.cleaned_data.get('end_queue')) + ' 09:00:00'),
-                ref_pic=queueform.cleaned_data.get('ref_pic'),
-                hairstyle=queueform.cleaned_data.get('hairstyle')
+                start_queue=parse(req.POST.get('start_queue')),
+                end_queue=parse(req.POST.get('end_queue')),
+                ref_pic=req.FILES.get('pic'),
+                hairstyle=req.POST.get('hairstyle')
             )
             messages.success(req, 'จองคิวสำเร็จ')
             return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
             return redirect('login')
-    else:
-        queueform = QueueForm()
     context = {
         'BarberShop': BarberShop.objects.get(id=shop_id),
-        'QueueForm': queueform
+        'queue': json.dumps(queues, indent=4, sort_keys=True, default=str),
+        'review':review,
+        'blogs':blogs
     }
     return render(req, 'core/detail.html', context)
 
@@ -120,8 +126,6 @@ def dashboard(req):
                     end_queue=q.end_queue,
                     status='03'
                 )
-                q.delete()
-                print('delete q 03')
             elif status == '04':
                 q = Queue.objects.get(id=req.POST.get('qid'))
                 h = History.objects.create(
@@ -131,6 +135,7 @@ def dashboard(req):
                     end_queue=q.end_queue,
                     status='04'
                 )
+                messages.error(req, "คิวของคุณถูกยกเลิก")
                 q.delete()
                 print('delete q 04')
             else:
@@ -190,8 +195,9 @@ def review(req, shop_id, h_id):
                 barbershop=shop,
                 customer=customer,
                 description=form.cleaned_data.get('description'),
-                rating=form.cleaned_data.get('rating')
+                rating=int(req.POST.get('rating'))
             )
+
             History.objects.filter(id=h_id).update(
                 status='05'
             )

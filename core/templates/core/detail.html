@@ -4,26 +4,410 @@
     Detail
 {% endblock %}
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success">
-                <strong>{{ message }}</strong>
+    {#    <p>Name : </p>#}
+    {#    <p>Address : {{ BarberShop.address }}</p>#}
+    {#    <p>Description : {{ BarberShop.description }}</p>#}
+    {#    {% if user.is_authenticated %}#}
+    {#        <form action="" method="post" enctype="multipart/form-data" class="f">#}
+    {#            {% csrf_token %}#}
+    {#            {{ QueueForm.as_p }}#}
+    {#            <input type="submit" value="reserve">#}
+    {#        </form>#}
+    {#    {% endif %}#}
+    <div id="app">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    <strong>{{ message }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="jumbotron text-center p-5 container">
+            <!-- Title -->
+            <h4 class="card-title h4 pb-2">
+                <i class="fas fa-store pr-1 blue-text"></i><strong> {{ BarberShop.shopname }}</strong>
+            </h4>
+
+            <!-- Card image -->
+            <div class="view overlay my-4">
+                {% if BarberShop.pic %}
+                    <img
+                            src="{{ BarberShop.pic.url }}"
+                            class="img-fluid w-50 h-50 mx-auto"
+                            alt=" responsive-image"
+                    />
+                {% else %}
+                    <img
+                            src="{% static 'images/shop_pic/default.jpg' %}"
+                            class="img-fluid w-50 h-50 mx-auto"
+                            alt=" responsive-image"
+                    />
+                {% endif %}
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
             </div>
-        {% endfor %}
-    {% endif %}
-    {% if BarberShop.pic %}
-        <img src="{{ BarberShop.pic.url }}" alt="" width="200" height="200">
-    {% else %}
-        <img src="{% static 'images/shop_pic/default.jpg' %}" alt="" width="200" height="200">
-    {% endif %}
-    <p>Name : {{ BarberShop.shopname }}</p>
-    <p>Address : {{ BarberShop.address }}</p>
-    <p>Description : {{ BarberShop.description }}</p>
-    {% if user.is_authenticated %}
-        <form action="" method="post" enctype="multipart/form-data" class="f">
-            {% csrf_token %}
-            {{ QueueForm.as_p }}
-            <input type="submit" value="reserve">
-        </form>
-    {% endif %}
+            <h4 class="text-info text-left font-weight-normal">คำอธิบายร้าน</h4>
+            <p class="text-justify p-2 font-weight-normal" style="text-indent: 2.5em">
+                {{ BarberShop.description }}
+            </p>
+            <div class="row">
+                <div class="col-1 text-info font-weight-normal ml-2">ที่อยู่ :</div>
+                <div class="text-left">
+                    <p class="text-justify font-weight-normal">
+                        {{ BarberShop.address }}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 col-sm-2 text-info font-weight-normal ml-1">ทรงผมยอดนิยม :</div>
+                <div class="text-left">
+                    <p class="text-justify font-weight-normal">
+                        {{ BarberShop.style }}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 col-sm-2 text-info font-weight-normal">เบอร์โทรติดต่อ :</div>
+                <div class="text-left">
+                    <p class="text-justify font-weight-normal">
+                        {{ BarberShop.tel }}
+                    </p>
+                </div>
+            </div>
+            <!-- Classic tabs -->
+            <div class="classic-tabs mx-2">
+                <ul class="nav tabs-orange" id="myClassicTabOrange" role="tablist">
+                    <li class="nav-item">
+                        <a
+                                class="nav-link  waves-light active show"
+                                id="profile-tab-classic-orange"
+                                data-toggle="tab"
+                                href="#profile-classic-orange"
+                                role="tab"
+                                aria-controls="profile-classic-orange"
+                                aria-selected="true"
+                        ><i
+                                class="fa-sm fas fa-calendar-alt fa-2x pb-2"
+                                aria-hidden="true"
+                        ></i
+                        ><br/>Booking</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                                class="nav-link waves-light"
+                                id="follow-tab-classic-orange"
+                                data-toggle="tab"
+                                href="#follow-classic-orange"
+                                role="tab"
+                                aria-controls="follow-classic-orange"
+                                aria-selected="false"
+                        ><i
+                                class=" fa-xs fas fa-newspaper fa-2x pb-2"
+                                aria-hidden="true"
+                        ></i
+                        ><br/>Promote</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                                class="nav-link waves-light"
+                                id="contact-tab-classic-orange"
+                                data-toggle="tab"
+                                href="#contact-classic-orange"
+                                role="tab"
+                                aria-controls="contact-classic-orange"
+                                aria-selected="false"
+                        ><i
+                                class="fa-sm fas fa-comment-alt fa-2x pb-2"
+                                aria-hidden="true"
+                        ></i
+                        ><br/>Review</a
+                        >
+                    </li>
+                </ul>
+
+                <div class="tab-content card" id="myClassicTabContentOrange">
+                    <div
+                            class="tab-pane fade active show"
+                            id="profile-classic-orange"
+                            role="tabpanel"
+                            aria-labelledby="profile-tab-classic-orange"
+                    >
+                        <table class="table table-striped table-responsive-md btn-table">
+                            <thead>
+                            <tr>
+                                <th>Weeks</th>
+                                <th v-for="week in weeks">[[ week.week ]]</th>
+                            </tr>
+                            <tr>
+                                <th>Days</th>
+                                <th v-for="day in days">[[ day.day ]]</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr v-for="time in times">
+                                <th scope="row">[[ time.start ]]-[[ time.end ]]</th>
+                                <td v-for="(day, index) in days">
+                                    <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm m-0 waves-effect"
+                                            @click="onClick(day.day, time)"
+                                            data-toggle="modal"
+                                            data-target="#modalContactForm"
+                                            v-bind:class="{'btn-outline-danger': isQueued(day.day, time), 'btn-outline-dark': (isOutOfTime(time) && index == 0 && !isQueued(day.day, time))}"
+                                            :disabled="isQueued(day.day, time) || (isOutOfTime(time) && index ==0)"
+                                    >
+                                        <p v-if="isOutOfTime(time) && index == 0 && !isQueued(day.day, time)"
+                                           style="margin: 0;font-size: 1.35em" class="f">หมดเวลา</p>
+                                        <p v-else-if="!isQueued(day.day, time)" style="margin:0;font-size: 1.35em"
+                                           class="f">
+                                            จอง
+                                        </p>
+                                        <p v-else-if="isQueued(day.day, time)" style="margin:0;font-size: 1.35em"
+                                           class="f">
+                                            จองแล้ว
+                                        </p>
+
+
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div
+                                class="modal fade "
+                                id="modalContactForm"
+                                tabindex="-1"
+                                role="dialog"
+                                aria-labelledby="myModalLabel"
+                                aria-hidden="true"
+                        >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold">
+                                            Choose Your Style
+                                        </h4>
+                                        <button
+                                                type="button"
+                                                class="close"
+                                                data-dismiss="modal"
+                                                aria-label="Close"
+                                        >
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body mx-3">
+                                        <h5 class="mt-1 mb-2">Reserve time: [[date_time]]</h5>
+                                        <br/>
+                                        <form action="" method="post" enctype="multipart/form-data"
+                                              class="f">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea2"
+                                                >ทรงที่อยากตัด</label
+                                                >
+                                                <textarea name="hairstyle"
+                                                          class="form-control rounded-0"
+                                                          id="exampleFormControlTextarea2"
+                                                          rows="3"
+                                                          placeholder="Describe Your hair"
+                                                ></textarea>
+                                            </div>
+                                            <br/>
+                                            <div class="input-group">
+                                                <input type="hidden" v-bind:value="date_start" name="start_queue"/>
+                                                <input type="hidden" v-bind:value="date_end" name="end_queue"/>
+                                                <div class="input-group-prepend">
+                                                <span
+                                                        class="input-group-text"
+                                                        id="inputGroupFileAddon01"
+                                                >Choose picture</span
+                                                >
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input name="pic"
+                                                           type="file"
+                                                           class="custom-file-input"
+                                                           id="inputGroupFile01"
+                                                           aria-describedby="inputGroupFileAddon01"
+                                                    />
+                                                    <label
+                                                            class="custom-file-label text-left"
+                                                            for="inputGroupFile01"
+                                                    >Your Style</label
+                                                    >
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="form-group float-right">
+                                                <input
+                                                        value="Reserve"
+                                                        type="submit"
+                                                        class="btn btn-outline-primary btn-sm m-0 waves-effect"
+                                                />
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="tab-pane fade"
+                            id="follow-classic-orange"
+                            role="tabpanel"
+                            aria-labelledby="follow-tab-classic-orange"
+                    >
+                        <div class=" text-center">
+
+                            <h4>
+                                <small>RECENT POSTS</small>
+                            </h4>
+                            <hr/>
+                            {% for b in blogs %}
+                                {% if b.picture %}
+                                <img src="{{ b.picture.url }}" class="w-25 h-25"/>
+                                {% endif %}
+                                <h2 class="mt-2">{{ b.header }}</h2>
+                                <h5>
+                                    <span class="glyphicon glyphicon-time"></span> Post by {{ b.BarberShop.shopname }}
+                                    {{ b.create_date }}
+                                </h5>
+                                <p class="p-5">
+                                    {{ b.content }}
+                                </p>
+                                <br/><br/>
+
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div
+                            class="tab-pane fade"
+                            id="contact-classic-orange"
+                            role="tabpanel"
+                            aria-labelledby="contact-tab-classic-orange"
+                    >
+
+                        <div class="row text-center text-sm-left">
+                            <div class="col-md-2 text-center mt-5 col-xs"></div>
+                            {% for r in review %}
+                                <div class="col-md-10 mt-5">
+                                    <div class="row">
+                                        <h4 class="col-sm-10 col-9">
+                                            {{ r.customer.name }}
+                                        </h4>
+                                        <div class="rating-box text-center col-sm-1 col-1 float-right">{{ r.rating }}</div>
+                                    </div>
+                                    <small>{{ r.date }}</small>
+                                    <p class="p-sm-2">
+                                        {{ r.description }}
+                                    </p>
+                                    <br/>
+                                    <hr style="color:black"/>
+                                </div>
+                                <div class="col-md-2 text-center"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Classic tabs -->
+        </div>
+        <!-- Jumbotron -->
+
+    </div>
+{% endblock %}
+{% block vue %}
+    <script type="text/javascript">
+        var now = moment().format("YYYY-MM-DD");
+        var mon = moment(moment().add(1, "day")).format("YYYY-MM-DD");
+        var tue = moment(moment().add(2, "day")).format("YYYY-MM-DD");
+        var wed = moment(moment().add(3, "day")).format("YYYY-MM-DD");
+        var thu = moment(moment().add(4, "day")).format("YYYY-MM-DD");
+        var fri = moment(moment().add(5, "day")).format("YYYY-MM-DD");
+        var sat = moment(moment().add(6, "day")).format("YYYY-MM-DD");
+        var week1 = moment().format("ddd");
+        var week2 = moment(moment().add(1, "day")).format("ddd");
+        var week3 = moment(moment().add(2, "day")).format("ddd");
+        var week4 = moment(moment().add(3, "day")).format("ddd");
+        var week5 = moment(moment().add(4, "day")).format("ddd");
+        var week6 = moment(moment().add(5, "day")).format("ddd");
+        var week7 = moment(moment().add(6, "day")).format("ddd");
+        var app = new Vue({
+            el: "#app",
+            delimiters: ["[[", "]]"],
+            data: {
+                weeks: [
+                    {week: week1},
+                    {week: week2},
+                    {week: week3},
+                    {week: week4},
+                    {week: week5},
+                    {week: week6},
+                    {week: week7}
+                ],
+                days: [
+                    {day: now},
+                    {day: mon},
+                    {day: tue},
+                    {day: wed},
+                    {day: thu},
+                    {day: fri},
+                    {day: sat}
+                ],
+                times: [
+                    {start: "08:00:00", end: "09:00:00"},
+                    {start: "09:00:00", end: "10:00:00"},
+                    {start: "10:00:00", end: "11:00:00"},
+                    {start: "11:00:00", end: "12:00:00"},
+                    {start: "12:00:00", end: "13:00:00"},
+                    {start: "13:00:00", end: "14:00:00"},
+                    {start: "14:00:00", end: "15:00:00"},
+                    {start: "15:00:00", end: "16:00:00"},
+                    {start: "17:00:00", end: "18:00:00"},
+                    {start: "18:00:00", end: "19:00:00"},
+                    {start: "19:00:00", end: "20:00:00"}
+                ],
+                date_time: "",
+                date_start: "",
+                date_end: "",
+                queued: [],
+                message: "1111"
+            },
+            methods: {
+                onClick(d, t) {
+                    // d stand for day and t stand for time.
+                    this.date_time = d + " " + t.start + "-" + t.end;
+                    this.date_start = d + " " + t.start;
+                    this.date_end = d + " " + t.end;
+                },
+                isQueued(d, t) {
+                    if (
+                        this.queued.includes(d + " " + t.start + " " + d + " " + t.end)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                },
+                isOutOfTime(t) {
+
+                    return (parseInt(moment().format('k')) > parseInt(t.start.slice(0, 2)))
+                }
+            },
+            mounted() {
+                var queues = JSON.parse('{{ queue | escapejs}}');
+                queues.forEach(e => {
+                    {#console.log(e.start_date.slice(0, 19) + " " + e.end_date.slice(0, 19))#}
+                    this.queued.push(e.start_date.slice(0, 19) + " " + e.end_date.slice(0, 19));
+                });
+            }
+        });
+    </script>
 {% endblock %}

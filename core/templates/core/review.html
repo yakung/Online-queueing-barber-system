@@ -9,6 +9,15 @@
     <form action="" method="post" class="text-left">
         {% csrf_token %}
         {{ form|crispy }}
+
+        <select name="rating" class="browser-default custom-select" id="" required>
+            <option value="" disabled selected>ให้คะแนนร้าน</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
         <input type="submit" class="btn btn-primary">
     </form>
 {% endblock %}
