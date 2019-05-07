@@ -14,6 +14,7 @@ from .forms import BlogForm, ReviewForm
 from users.models import BarberShop, Customer
 from django.contrib.auth.models import Group
 
+
 def index(req):
     context = {}
     group = ""
@@ -28,22 +29,44 @@ def index(req):
         if search != '':
             print(1)
             shop = BarberShop.objects.filter(Q(shopname__icontains=search) | Q(address__icontains=search))
+            print(shop)
             if style != '':
                 print(2)
                 shop = BarberShop.objects.filter((Q(shopname__icontains=search) | Q(address__icontains=search)),
                                                  Q(style__icontains=style))
+            elif rate != '0' and rate:
+                print(3)
+                shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(
+                    Q(shopname__icontains=search) | Q(address__icontains=search), avg_rating=rate,
+                    style__icontains=style, )
+            elif rate == '0' and rate:
+                print(4)
+                shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(
+                    Q(shopname__icontains=search) | Q(address__icontains=search), avg_rating=None,
+                    style__icontains=style, )
+
         elif style != '':
-            print(3)
+            print(5)
             shop = BarberShop.objects.filter(Q(style__icontains=style))
             if search != '':
-                print(4)
+                print(6)
                 shop = BarberShop.objects.filter((Q(shopname__icontains=search) | Q(address__icontains=search)),
                                                  Q(style__icontains=style))
+            elif rate != '0' and rate:
+                print(7)
+                shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(
+                    Q(shopname__icontains=search) | Q(address__icontains=search), avg_rating=rate,
+                    style__icontains=style, )
+            elif rate == '0' and rate:
+                print(8)
+                shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(
+                    Q(shopname__icontains=search) | Q(address__icontains=search), avg_rating=None,
+                    style__icontains=style, )
         elif rate != '0' and rate:
-            print(5)
+            print(9)
             shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(avg_rating=rate)
         elif rate == '0' and rate:
-            print(6)
+            print(10)
             shop = BarberShop.objects.annotate(avg_rating=Round(Avg('review__rating'))).filter(avg_rating=None)
 
     cs, created = Group.objects.get_or_create(name='Customer')
@@ -64,6 +87,7 @@ def index(req):
             style = cus_profile.style
             if (style):
                 context['style'] = style
+    print(shop)
     context['BarberShop'] = shop
     context['group'] = str(group)
 
@@ -93,7 +117,7 @@ def detail(req, shop_id):
                 ref_pic=req.FILES.get('pic'),
                 hairstyle=req.POST.get('hairstyle')
             )
-            messages.success(req,'จองคิวสำเร็จ')
+            messages.success(req, 'จองคิวสำเร็จ')
             return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
