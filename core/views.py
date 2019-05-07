@@ -1,6 +1,7 @@
+import random
 from datetime import datetime, timedelta
 import json
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Count, Max
 from django.db.models.functions import Round
 from pytz import timezone
 from dateutil.parser import parse
@@ -13,6 +14,7 @@ from .models import Blog, Review
 from .forms import BlogForm, ReviewForm
 from users.models import BarberShop, Customer
 from django.contrib.auth.models import Group
+from random import shuffle
 
 
 def index(req):
