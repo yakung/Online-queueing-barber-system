@@ -109,16 +109,28 @@ def detail(req, shop_id):
         queues.append(queue)
     if req.method == 'POST':
         if req.user.groups.filter(name='Customer').exists():
-            Queue.objects.create(
-                barbershop=BarberShop.objects.get(id=shop_id),
-                customer=Customer.objects.get(user_id=req.user.id),
-                start_queue=parse(req.POST.get('start_queue')),
-                end_queue=parse(req.POST.get('end_queue')),
-                ref_pic=req.FILES.get('pic'),
-                hairstyle=req.POST.get('hairstyle')
-            )
-            messages.success(req, 'จองคิวสำเร็จ')
-            return redirect('history')
+            try:
+                flag = Queue.objects.get(start_queue__contains=parse(req.POST.get('start_queue')),
+                                         end_queue__contains=parse(req.POST.get('end_queue')))
+                print(1)
+            except Queue.DoesNotExist:
+                flag = Queue.objects.none()
+                print(2)
+            if flag:
+                messages.error(req,'คิวเต็มโปรดเลือกใหม่')
+                return redirect('/detail/' + str(shop_id))
+
+            else:
+                Queue.objects.create(
+                    barbershop=BarberShop.objects.get(id=shop_id),
+                    customer=Customer.objects.get(user_id=req.user.id),
+                    start_queue=parse(req.POST.get('start_queue')),
+                    end_queue=parse(req.POST.get('end_queue')),
+                    ref_pic=req.FILES.get('pic'),
+                    hairstyle=req.POST.get('hairstyle')
+                )
+                messages.success(req, 'จองคิวสำเร็จ')
+                return redirect('history')
         else:
             messages.error(req, 'Please sign in as customer!')
             return redirect('login')
@@ -127,7 +139,7 @@ def detail(req, shop_id):
         'queue': json.dumps(queues, indent=4, sort_keys=True, default=str),
         'review': review,
         'blogs': blogs,
-        'success': success
+        'success': success,
     }
     return render(req, 'core/detail.html', context)
 

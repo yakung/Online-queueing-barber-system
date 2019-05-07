@@ -14,11 +14,13 @@
             <strong>{{ error }}</strong>
         </div>
     {% endif %}
-    {% if messages.tags == 'error' %}
+    {% if messages %}
         {% for message in messages %}
+            {% if message.tags == 'error' %}
             <div class="alert alert-danger">
                 <strong>{{ message }}</strong>
             </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 

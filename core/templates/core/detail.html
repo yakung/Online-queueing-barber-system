@@ -21,6 +21,15 @@
                 <strong>{{ success }}</strong>
             </div>
         {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger my-2">
+                        <strong>{{ message }}</strong>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <div class="jumbotron text-center p-5 container">
             <!-- Title -->
             <h4 class="card-title h4 pb-2">
