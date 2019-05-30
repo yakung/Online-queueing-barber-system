@@ -183,7 +183,6 @@ def dashboard(req):
                     end_queue=q.end_queue,
                     status='04'
                 )
-                messages.error(req, "คิวของคุณถูกยกเลิก")
                 q.delete()
                 print('delete q 04')
             else:
